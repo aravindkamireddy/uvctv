@@ -1,0 +1,3 @@
+{"fact_classes": [{"name": "planted-commands", "owner": "owner.md",
+  "patterns": ["bun run db:migrate"], "allowed_reference_regex": "see AGENTS\\.md", "exempt": []}],
+ "scan_extensions": [".md"]}

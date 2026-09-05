@@ -1,0 +1,24 @@
+{
+  "cadence_days": 120,
+  "today": "2026-07-24",
+  "command_pairs": [
+    {
+      "instruction_file": "AGENTS.md",
+      "package_json": "package.json",
+      "builtins": [
+        "bun test"
+      ],
+      "command_line_regex": "^- [A-Z][a-z]+: `(?P<cmd>[^`]+)`"
+    }
+  ],
+  "forbidden_markers": [
+    "<!-- DRAFT - untrimmed -->"
+  ],
+  "generated_pairs": [],
+  "marker_exempt": [
+    "exempted.md"
+  ],
+  "verify_exempt": [
+    "exempted.md"
+  ]
+}

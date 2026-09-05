@@ -1,0 +1,27 @@
+{
+  "name": "uvctv",
+  "version": "1.0.0",
+  "description": "Universal Vibe-Coding Toolkit Vault - one canonical skill set for Claude Code, Codex, Command Code, Antigravity, Cursor, Zed, OpenClaw and OpenCode",
+  "bin": {
+    "uvctv": "cli/bin/uvctv.js"
+  },
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "cli",
+    "skills",
+    "tools/opencode/agent",
+    "personal-layer",
+    "MANIFEST.md",
+    "README.md",
+    "BOOTSTRAP.md"
+  ],
+  "scripts": {
+    "postinstall": "node -e \"console.log('uvctv installed - run: npx uvctv init')\""
+  },
+  "keywords": ["ai-agents", "skills", "agent-skills", "claude-code", "codex", "opencode", "zed", "cursor", "openclaw"],
+  "license": "MIT",
+  "dependencies": {}
+}

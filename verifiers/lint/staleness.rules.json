@@ -1,0 +1,29 @@
+{
+  "version": "1.1",
+  "cadence_days": 120,
+  "today": null,
+  "command_pairs": [],
+  "forbidden_markers": [
+    "<!-- DRAFT - untrimmed -->"
+  ],
+  "generated_pairs": [],
+  "_notes": [
+    "cadence_days: 120 matches the clock already stated in AUDIT-REPORT.md for [VERIFY 2026-07]-style tags.",
+    "today: null (not a frozen date) - unlike the fixture's '2026-07-24' override, a real self-lint should always check against the actual run date, not a snapshot.",
+    "command_pairs is deliberately empty. This check verifies an instruction file's commands against a paired package.json. Harborline is a reference example described in prose inside foundation/agents-md-example-harborline-root.md - it has no real package.json anywhere in this vault (the vault is a template/reference library, not a live codebase). Pointing this at the harborline example file would produce a permanent 'paired package.json missing' finding that isn't fixable and isn't a real staleness problem - it would just be noise on every run. This check activates once the vault is instantiated into a real adopter repo with a real package.json (see team-layer/tree.md), not against the vault's own template content.",
+    "generated_pairs is deliberately empty for the same reason: tools/antigravity/gemini-md-template.md shows the 'AUTO-GENERATED FROM AGENTS.md' header as a documented TEMPLATE for adopters to use, not an actual generated-from relationship that exists inside this vault (there is no root AGENTS.md + GEMINI.md pair here to check freshness between).",
+    "KNOWN FALSE POSITIVES (expected, not a bug in this rules file): neither check_markers() nor check_verify_tags() in staleness_linter.py has a per-file exemption mechanism - unlike ssot_linter's fact_classes, which support an 'exempt' list. Running this rules file against the real vault root produces exactly 4 findings, all root-caused to that one gap: (1)+(2) foundation/agents-md-counterexample-bloated.md and foundation/agents-md-template.md both legitimately contain the literal marker string as documentation OF the convention, not because either is an actual unmerged draft; (3)+(4) verifiers/lint/fixtures/staleness/AGENTS.md trips both checks because it is the linter's own golden test data, deliberately planted with a stale [VERIFY 2025-01] tag and the DRAFT marker. See JUSTIFICATION.md for the full run output and the recommendation to extend both functions with exempt-list support matching ssot_linter's - proposed, not implemented, pending sign-off.",
+    "v1.1 (2026-07-25): added marker_exempt + verify_exempt per the review's recommendation, populated with the 4 documented false positives (2 foundation doc files x marker, fixture golden x marker + verify). Mechanism implemented in staleness_linter.py same date.",
+    "v1.1 addendum: exempted.md (the exemption mechanism's own negative-test golden, added same date per follow-up 2c) joins both exempt lists - same golden-test-data class as fixtures/staleness/AGENTS.md."
+  ],
+  "marker_exempt": [
+    "foundation/agents-md-template.md",
+    "foundation/agents-md-counterexample-bloated.md",
+    "verifiers/lint/fixtures/staleness/AGENTS.md",
+    "verifiers/lint/fixtures/staleness/exempted.md"
+  ],
+  "verify_exempt": [
+    "verifiers/lint/fixtures/staleness/AGENTS.md",
+    "verifiers/lint/fixtures/staleness/exempted.md"
+  ]
+}

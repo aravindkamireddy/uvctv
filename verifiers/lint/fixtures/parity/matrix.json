@@ -1,0 +1,21 @@
+{
+  "skills": [
+    "demo"
+  ],
+  "canonical_dir": "skills",
+  "tools": {
+    "toolA": {
+      "mode": "canonical"
+    },
+    "toolB": {
+      "mode": "port",
+      "path_template": "ports/{skill}.md"
+    },
+    "toolC": {
+      "mode": "na",
+      "reason": "no unit",
+      "landing": "missing-landing.md"
+    }
+  },
+  "suites_dir": "suites"
+}

@@ -1,0 +1,25 @@
+{
+  "fact_classes": [
+    {
+      "name": "harborline-commands-and-pins",
+      "owner": "foundation/agents-md-example-harborline-root.md",
+      "patterns": ["bun run db:migrate", "bun run deploy", "3.23.8"],
+      "allowed_reference_regex": "AGENTS\\.md|agents-md-example-harborline-root\\.md",
+      "exempt": [
+        "REFERENCE-ANCHORS.md",
+        "orchestration/guardrails-template.md",
+        "verifiers/lint/fixtures/ssot/owner.md",
+        "verifiers/lint/fixtures/ssot/violation.md"
+      ]
+    }
+  ],
+  "scan_extensions": [".md"],
+  "_notes": [
+    "Scope: this first cut covers only the harborline-commands-and-pins fact class, not all 10 rows in MANIFEST.md's SSOT ownership table. See JUSTIFICATION.md for why the other 9 were deferred rather than rushed.",
+    "'bun test' and 'bun install' were deliberately excluded as patterns: a real grep shows them in 15-20+ files as generic worked-example text (skill traces, checklists, curriculum), not restatements of the harborline fact record. Including them would produce near-total false-positive noise and erode trust in the linter's real findings, the same failure mode GR-6 (description-tuning) warns against for skill descriptions.",
+    "REFERENCE-ANCHORS.md is exempt because MANIFEST.md's own SSOT table designates it a 'reference-only toucher (fixture def)' for this fact class - it narrates the GR-2/GR-3 incidents and cannot do so without naming the actual commands.",
+    "orchestration/guardrails-template.md is exempt because its one hit ('never run db:migrate') is a generic phrasing example inside a template about how to WRITE guardrail entries, not a claim about harborline's actual command list.",
+    "scan_extensions is .md only, matching the fixture default. .jsonl/.py files were excluded because training exemplars and script docstrings need to contain realistic real commands to function as intended - the restatement rule doesn't cleanly apply to them yet.",
+    "The two fixtures/ssot/*.md exemptions exist because those files are the linter's own golden test data - they coincidentally reuse 'bun run db:migrate' as their planted-violation string, which collides with this rules file when run against the whole vault root rather than just the content tree. Exempted here rather than solved by re-scoping the invocation, so the rules file gives correct results regardless of what root path it's run against."
+  ]
+}

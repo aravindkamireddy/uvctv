@@ -1,0 +1,49 @@
+{
+  "skills": [
+    "skill-writer",
+    "orchestrator",
+    "mcp-permission-audit",
+    "security-reviewer",
+    "ui-ux-designer",
+    "design-system"
+  ],
+  "canonical_dir": "skills",
+  "tools": {
+    "claude-code": {
+      "mode": "canonical"
+    },
+    "codex": {
+      "mode": "canonical"
+    },
+    "command-code": {
+      "mode": "canonical"
+    },
+    "antigravity": {
+      "mode": "canonical"
+    },
+    "opencode": {
+      "mode": "port",
+      "path_template": "tools/opencode/agent/{skill}.md"
+    },
+    "design-surfaces": {
+      "mode": "na",
+      "reason": "design surfaces are contract producers, not skill hosts",
+      "landing": "tools/design-surfaces.md"
+    },
+    "cursor": {
+      "mode": "canonical",
+      "note": "~/.cursor/skills-cursor/<name>/SKILL.md (verified 2026-09-02); Claude-skill import is a secondary path"
+    },
+    "zed": {
+      "mode": "canonical",
+      "note": "~/.agents/skills flat; see tools/zed/zed-notes.md"
+    },
+    "openclaw": {
+      "mode": "canonical",
+      "note": "gateway layer; remote profile via git URL; see tools/openclaw/openclaw-notes.md"
+    }
+  },
+  "suites_dir": "verifiers/trigger-tests",
+  "suite_min_not_cases": 3,
+  "suite_min_indirect": 3
+}
