@@ -2,8 +2,9 @@
 title: The vault doc server - connecting the ~45 reference documents over MCP
 layer: L7
 priority: P1
-version: 1.1
-date: 2026-09-02
+version: 1.2
+date: 2026-09-05
+changelog: v1.2 - mcp-install automates the config write; global paths corrected (v1.1 gave Claude Code's PROJECT path alongside everyone else's global)
 changelog: v1.1 - added Antigravity, Command Code and OpenClaw config stanzas; v1.0 documented only five of the eight MCP-capable tools and did not say why the others were absent
 source_model: Claude Fable 5
 depends_on: [cli/bin/uvctv.js, mcp/registry-template.md, verifiers/eval-loop.md]
@@ -26,43 +27,57 @@ Serving skills over MCP would trade the one mechanism that makes them
 trigger for one that requires the model to decide to look. Serving docs as
 files would flood every session. Neither is a preference; both are forced.
 
-## Connect it
+## Connect it - automatically
+
+```
+npx github:<you>/uvctv mcp-install --dry-run    # preview
+npx github:<you>/uvctv mcp-install
+```
+
+Detects which tools are installed, merges the entry into each tool's GLOBAL
+config (never a project one - you want the docs everywhere), backs up each
+file first, and refuses to touch a config it cannot parse. Idempotent. Codex
+uses TOML, so it prints that snippet for you to paste.
+
+Restart each tool afterwards - MCP servers load at startup.
+
+## Connect it - by hand
 
 The server ships inside the package and is launched BY the client, so there
 is nothing to install and nothing to keep in sync:
 
-**Claude Code** - `.mcp.json`:
+**Claude Code** - `~/.claude.json` for global, or `.mcp.json` for one project:
 ```json
 { "mcpServers": { "uvctv-vault": {
-    "command": "npx", "args": ["-y", "github:YOUR-USERNAME/uvctv", "mcp"] } } }
+    "command": "npx", "args": ["-y", "github:<you>/uvctv", "mcp"] } } }
 ```
 
-**OpenCode** - `opencode.json`:
+**OpenCode** - `~/.config/opencode/opencode.json` (global):
 ```json
 { "mcp": { "uvctv-vault": {
-    "type": "local", "command": ["npx", "-y", "github:YOUR-USERNAME/uvctv", "mcp"] } } }
+    "type": "local", "command": ["npx", "-y", "github:<you>/uvctv", "mcp"] } } }
 ```
 `[VERIFY 2026-09: field shape against current OpenCode schema]`
 
-**Zed** - `settings.json`:
+**Zed** - `~/.config/zed/settings.json`, or `%APPDATA%\Zed\settings.json` on Windows:
 ```json
 { "context_servers": { "uvctv-vault": {
-    "command": "npx", "args": ["-y", "github:YOUR-USERNAME/uvctv", "mcp"] } } }
+    "command": "npx", "args": ["-y", "github:<you>/uvctv", "mcp"] } } }
 ```
 
-**Cursor** - `~/.cursor/mcp.json`, same shape as Claude Code.
+**Cursor** - `~/.cursor/mcp.json` (global), same shape as Claude Code.
 
 **Codex** - `~/.codex/config.toml`:
 ```toml
 [mcp_servers.uvctv-vault]
 command = "npx"
-args = ["-y", "github:YOUR-USERNAME/uvctv", "mcp"]
+args = ["-y", "github:<you>/uvctv", "mcp"]
 ```
 
 **Antigravity** - `~/.gemini/antigravity/mcp_config.json`:
 ```json
 { "mcpServers": { "uvctv-vault": {
-    "command": "npx", "args": ["-y", "github:YOUR-USERNAME/uvctv", "mcp"] } } }
+    "command": "npx", "args": ["-y", "github:<you>/uvctv", "mcp"] } } }
 ```
 Path verified 2026-07 from Antigravity's own docs; the config's internal shape
 is `[VERIFY 2026-09]` - it follows the common `mcpServers` convention, but I
@@ -70,7 +85,7 @@ have not confirmed the key names against a live file.
 
 **Command Code** - managed through its `/mcp` command rather than a file you
 edit by hand. Run `/mcp` in the CLI and add a server with command `npx` and
-args `-y github:YOUR-USERNAME/uvctv mcp`. `[VERIFY 2026-09: exact prompts]` - the
+args `-y github:<you>/uvctv mcp`. `[VERIFY 2026-09: exact prompts]` - the
 `/mcp` surface is documented, the add-flow is not recorded in this vault.
 
 **OpenClaw** - the gateway holds its own MCP config; for a REMOTE gateway

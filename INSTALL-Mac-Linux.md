@@ -67,7 +67,7 @@ Typical paths:
 If you have Node 18+ installed (`node --version` to check):
 
 ```bash
-npx github:YOUR-USERNAME/uvctv init
+npx github:<you>/uvctv init
 ```
 
 That is the whole setup. It creates the toolkit, extracts the skills, and
@@ -170,6 +170,18 @@ It refuses to touch a real directory or a link something else made.
 
 Add `--restore` (`-Restore`) to copy the toolkit's files back into each tool's
 own folder first, so a tool you keep using is not left with no skills.
+
+## Connect the reference library
+
+```
+npx github:<you>/uvctv mcp-install --dry-run
+npx github:<you>/uvctv mcp-install
+```
+
+Writes the MCP config into every tool it finds, backs each file up first, and
+skips anything it cannot parse. Restart your tools afterwards. Then ask:
+"How should I split work across parallel agents?" - the agent should call
+`search_vault` on its own.
 
 ## What happens next
 

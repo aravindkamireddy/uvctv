@@ -7,7 +7,7 @@
  *   version: 1.0 | date: 2026-08-15 | source_model: Claude Fable 5
  *   depends_on: personal-layer/tree.md, personal-layer/setup.sh
  *   audience: solo, architect, team | tools: all
- *   usage: npx github:YOUR-USERNAME/uvctv init      (from anywhere, no clone needed)
+ *   usage: npx github:<you>/uvctv init      (from anywhere, no clone needed)
  *
  * Why this exists, when setup.{sh,ps1} already work:
  *   1. One implementation instead of two twins that must stay in lockstep -
@@ -36,7 +36,7 @@ const crypto = require('crypto');
 
 const HOME = os.homedir();
 const IS_WIN = process.platform === 'win32';
-const VERSION = '1.1.0';
+const VERSION = '1.2.0';
 
 // ---------------------------------------------------------------- arguments
 const argv = process.argv.slice(2);
@@ -47,7 +47,7 @@ const opt = n => {
   return i !== -1 && argv[i + 1] && !argv[i + 1].startsWith('-') ? argv[i + 1] : null;
 };
 const unknown = argv.filter(a => a.startsWith('--') &&
-  !['dry-run','check','force','adopt','all','restore','toolkit','vault','help','version','json'].includes(a.slice(2)));
+  !['dry-run','check','force','adopt','all','restore','toolkit','vault','help','version','json','package'].includes(a.slice(2)));
 if (unknown.length) { console.log(`unknown argument(s): ${unknown.join(' ')}   (try: uvctv help)`); process.exit(2); }
 
 const DRY = flag('dry-run') || flag('check');
@@ -266,6 +266,91 @@ function wire(mode) {
   return { linked, removed, left };
 }
 
+
+// ------------------------------------------------------- MCP client configs
+// Where each tool keeps its GLOBAL mcp config, and under which key. Global on
+// purpose: you want the vault's docs in every project, not per-repo.
+// [VERIFY 2026-09] paths carry the same caveat as the link map.
+const MCP_TARGETS = [
+  { tool: 'claude-code', file: path.join(HOME, '.claude.json'),
+    key: 'mcpServers', shape: 'args' },
+  { tool: 'cursor', file: path.join(HOME, '.cursor', 'mcp.json'),
+    key: 'mcpServers', shape: 'args' },
+  { tool: 'zed', file: IS_WIN ? path.join(HOME, 'AppData', 'Roaming', 'Zed', 'settings.json')
+                              : path.join(HOME, '.config', 'zed', 'settings.json'),
+    key: 'context_servers', shape: 'args' },
+  { tool: 'antigravity', file: path.join(HOME, '.gemini', 'antigravity', 'mcp_config.json'),
+    key: 'mcpServers', shape: 'args' },
+  { tool: 'opencode', file: path.join(HOME, '.config', 'opencode', 'opencode.json'),
+    key: 'mcp', shape: 'command-array' },
+];
+
+/** The npx command that launches this package's doc server. */
+function serverSpec(shape, pkg) {
+  if (shape === 'command-array') return { type: 'local', command: ['npx', '-y', pkg, 'mcp'] };
+  return { command: 'npx', args: ['-y', pkg, 'mcp'] };
+}
+
+function cmdMcpInstall() {
+  // The package spec npx should fetch. Defaults to whatever npx used to run
+  // this copy; --package overrides for a local clone.
+  const pkg = opt('package') ||
+    (process.env.npm_package_name && process.env.npm_config_user_agent
+      ? 'github:<you>/uvctv' : 'github:<you>/uvctv');
+  say(`uvctv ${VERSION} - MCP config (${DRY ? 'dry-run' : 'write'})`);
+  say(`server spec: npx -y ${pkg} mcp`);
+  if (pkg.includes('<you>')) {
+    say('');
+    say('WARNING: package spec still contains the <you> placeholder. Pass');
+    say('  --package github:YOUR-USERNAME/uvctv   (or a local path)');
+    say('or the config written will not resolve.');
+  }
+  say('');
+  let done = 0, skipped = 0;
+  for (const t of MCP_TARGETS) {
+    const dir = path.dirname(t.file);
+    if (!fs.existsSync(dir)) { say(`not detected  ${t.tool}  (no ${dir})`); skipped++; continue; }
+
+    let cfg = {};
+    if (fs.existsSync(t.file)) {
+      const raw = fs.readFileSync(t.file, 'utf8');
+      try { cfg = JSON.parse(raw); }
+      catch (e) {
+        guardrail(`uvctv left ${t.file} alone: it is not valid JSON (${e.message})`,
+          'GR-16', 'never overwrite a config we cannot parse - the operator fixes it, we do not guess',
+          t.tool, 'uvctv mcp-install --dry-run on a malformed config exits 1');
+        skipped++; continue;
+      }
+    }
+    if (!cfg[t.key] || typeof cfg[t.key] !== 'object') cfg[t.key] = {};
+    const existing = cfg[t.key]['uvctv-vault'];
+    const spec = serverSpec(t.shape, pkg);
+    if (existing && JSON.stringify(existing) === JSON.stringify(spec)) {
+      say(`ok     ${t.tool}  (already configured)`); continue;
+    }
+    if (DRY) {
+      say(`would ${existing ? 'update' : 'add   '} ${t.tool}  -> ${t.file}`); done++; continue;
+    }
+    // back up before the first modification, once
+    if (fs.existsSync(t.file) && !fs.existsSync(t.file + '.uvctv-bak')) {
+      fs.copyFileSync(t.file, t.file + '.uvctv-bak');
+    }
+    cfg[t.key]['uvctv-vault'] = spec;
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(t.file, JSON.stringify(cfg, null, 2) + '\n');
+    say(`${existing ? 'update' : 'add   '} ${t.tool}  -> ${t.file}`);
+    done++;
+  }
+  say('');
+  say(`done: ${done} config(s) ${DRY ? 'would change' : 'written'}, ${skipped} skipped.`);
+  if (!DRY && done) say('RESTART each tool - MCP servers load at startup.');
+  say('Codex uses TOML, not JSON; add this to ~/.codex/config.toml by hand:');
+  say('  [mcp_servers.uvctv-vault]');
+  say('  command = "npx"');
+  say(`  args = ["-y", "${pkg}", "mcp"]`);
+  if (DRY) say('(dry run - nothing was changed)');
+}
+
 // ---------------------------------------------------------------- commands
 function header(mode, existing) {
   say(`uvctv ${VERSION}  (toolkit: ${TOOLKIT})`);
@@ -339,12 +424,14 @@ function cmdStatus() {
 function cmdHelp() {
   say(`uvctv ${VERSION} - Universal Vibe-Coding Toolkit Vault
 
-  npx github:YOUR-USERNAME/uvctv init          create the toolkit and link every detected tool
-  npx github:YOUR-USERNAME/uvctv update        refresh content, keep your edits, re-check links
-  npx github:YOUR-USERNAME/uvctv link          (re)link only
-  npx github:YOUR-USERNAME/uvctv unlink        remove links this toolkit created
-  npx github:YOUR-USERNAME/uvctv status        what is linked, what is not, and why
-  npx github:YOUR-USERNAME/uvctv mcp           run the vault doc server (MCP clients launch this)
+  npx github:<you>/uvctv init          create the toolkit and link every detected tool
+  npx github:<you>/uvctv update        refresh content, keep your edits, re-check links
+  npx github:<you>/uvctv link          (re)link only
+  npx github:<you>/uvctv unlink        remove links this toolkit created
+  npx github:<you>/uvctv status        what is linked, what is not, and why
+  npx github:<you>/uvctv mcp           run the vault doc server (MCP clients launch this)
+  npx github:<you>/uvctv mcp-install   write the MCP config into every tool found
+                                       (--package github:you/uvctv, --dry-run)
 
 Options
   --dry-run, --check   show every action, change nothing
@@ -366,9 +453,10 @@ switch (CMD) {
   case 'link': cmdLink(); break;
   case 'unlink': cmdUnlink(); break;
   case 'status': cmdStatus(); break;
+  case 'mcp-install': cmdMcpInstall(); break;
   case 'mcp':
     // Hand off to the doc server. Launched BY an MCP client over stdio, never
-    // by hand: "command": "npx", "args": ["-y", "github:YOUR-USERNAME/uvctv", "mcp"]
+    // by hand: "command": "npx", "args": ["-y", "github:<you>/uvctv", "mcp"]
     require('../lib/mcp-server.js');
     return;
   case 'version': say(VERSION); break;

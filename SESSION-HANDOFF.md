@@ -2,8 +2,8 @@
 title: Session handoff - build + audit state
 layer: L9
 priority: P0
-version: 2.3
-date: 2026-09-02
+version: 2.4
+date: 2026-09-05
 changelog: v1.5 - date field corrected (had read 2026-07-24 since the original build; version bumps never touched it - GR-2 in this file's own frontmatter). Adds the 2026-08-04 guide rewrite and the two script bugs it exposed.
 source_model: Claude Fable 5
 depends_on: [MANIFEST.md]
@@ -14,7 +14,24 @@ tools: all
 
 # SESSION-HANDOFF - Universal Vibe-Coding Toolkit vault
 
-## State: 2026-09-02 (latest) - provenance-aware update, 106 files, **UNAUDITED**
+## State: 2026-09-05 - mcp-install, 106 files, **UNAUDITED**
+
+**npx github: RESOLUTION IS NOW PROVEN.** The operator published to
+github:aravindkamireddy/uvctv and ran init successfully from a clean machine -
+the last untested link in the distribution chain. Adopt also fired for real,
+moving 26 pre-existing Cursor skills into the toolkit.
+
+`uvctv mcp-install` added: detects installed tools, merges the doc-server
+entry into each tool's GLOBAL config, backs up before writing, refuses
+unparseable configs with a GR-16 row, idempotent on re-run. Verified against
+a HOME with an existing server (preserved), a malformed config (refused) and
+a repeat run (no-op).
+
+Also corrected: the docs previously gave Claude Code's PROJECT config path
+(`.mcp.json`) alongside everyone else's GLOBAL path - an inconsistency the
+operator caught.
+
+## State (prior): 2026-09-02 - provenance-aware update, 106 files
 
 **A defect found by testing the operator's actual scenario.** Update only ever
 ADDED missing files. An existing toolkit therefore kept its original skills
@@ -31,7 +48,7 @@ intact, in both the CLI and setup.sh.
 ## State (prior): 2026-09-02 - MCP doc server, 106 files
 
 The ~56 reference documents are now reachable by agents on demand:
-`cli/lib/mcp-server.js`, launched as `npx -y github:YOUR-USERNAME/uvctv mcp`. Zero
+`cli/lib/mcp-server.js`, launched as `npx -y github:<you>/uvctv mcp`. Zero
 dependencies (node builtins, JSON-RPC over stdio). Exposes every doc as a
 `vault://` resource plus `search_vault` and `read_vault_doc`.
 
@@ -124,7 +141,7 @@ vault works.
 
 ## State (prior): 2026-08-16 - Node CLI, 103 files
 
-- **`npx github:YOUR-USERNAME/uvctv init` is now the primary install path.**
+- **`npx github:<you>/uvctv init` is now the primary install path.**
   `cli/bin/uvctv.js` + root `package.json`, zero dependencies, node builtins
   only. Verbs: init / update / link / unlink / status, with --dry-run/--check,
   --adopt, --all, --force, --restore, --json. Ten scenarios tested.
@@ -142,10 +159,10 @@ vault works.
 
 ## TO PUBLISH (required before `npx` works for anyone)
 1. Push the vault to a GitHub repo.
-2. Replace `YOUR-USERNAME` with the org/user in: README.md, personal-layer/tree.md,
+2. Replace `<you>` with the org/user in: README.md, personal-layer/tree.md,
    BOOTSTRAP.md, both INSTALL guides, cli/bin/uvctv.js help text.
 3. Test `npx github:<org>/<repo> init` from a clean machine.
-Until then every `npx github:YOUR-USERNAME/uvctv` line is a placeholder.
+Until then every `npx github:<you>/uvctv` line is a placeholder.
 
 ## State (prior): 2026-08-11 - OpenClaw + Zed + unified setup, 101 files
 
