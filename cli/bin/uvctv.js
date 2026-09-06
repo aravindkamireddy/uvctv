@@ -36,7 +36,7 @@ const crypto = require('crypto');
 
 const HOME = os.homedir();
 const IS_WIN = process.platform === 'win32';
-const VERSION = '1.2.0';
+const VERSION = '1.3.0';
 
 // ---------------------------------------------------------------- arguments
 const argv = process.argv.slice(2);
@@ -291,6 +291,51 @@ function serverSpec(shape, pkg) {
   return { command: 'npx', args: ['-y', pkg, 'mcp'] };
 }
 
+
+/**
+ * Codex keeps MCP servers in TOML, and this CLI has no TOML parser by design
+ * (zero dependencies). Appending a table is nonetheless the CORRECT operation,
+ * not a workaround: TOML tables are order-independent and self-delimiting, so
+ * appending a well-formed table to a valid file yields a valid file. Parsing
+ * would be more work to reach the same result with more ways to be wrong.
+ *
+ * The narrowness is the point - it does ONE thing:
+ *   - table absent  -> append it
+ *   - table present -> REFUSE and tell the operator to edit by hand
+ * It never rewrites an existing entry, because that is the case it cannot
+ * verify without parsing. Removing that refusal is what would make this lazy.
+ */
+function codexToml(pkg) {
+  const file = path.join(HOME, '.codex', 'config.toml');
+  const block =
+    `\n[mcp_servers.uvctv-vault]\n` +
+    `command = "npx"\n` +
+    `args = ["-y", "${pkg}", "mcp"]\n`;
+
+  if (!fs.existsSync(path.dirname(file))) {
+    say(`not detected  codex  (no ${path.dirname(file)})`);
+    return 'skip';
+  }
+  const existing = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
+  if (existing.includes('[mcp_servers.uvctv-vault]')) {
+    const wanted = `args = ["-y", "${pkg}", "mcp"]`;
+    if (existing.includes(wanted)) { say('ok     codex  (already configured)'); return 'ok'; }
+    guardrail(
+      `uvctv left ${file} alone: [mcp_servers.uvctv-vault] exists with different values`,
+      'GR-16',
+      'never rewrite an existing TOML entry without parsing the file - edit it by hand',
+      'codex',
+      'uvctv mcp-install on a config with a differing uvctv-vault entry exits 1');
+    say(`       replace its args with: ["-y", "${pkg}", "mcp"]`);
+    return 'skip';
+  }
+  if (DRY) { say(`would add    codex  -> ${file}`); return 'done'; }
+  if (existing && !fs.existsSync(file + '.uvctv-bak')) fs.copyFileSync(file, file + '.uvctv-bak');
+  fs.appendFileSync(file, block);
+  say(`add    codex  -> ${file}`);
+  return 'done';
+}
+
 function cmdMcpInstall() {
   // The package spec npx should fetch. Defaults to whatever npx used to run
   // this copy; --package overrides for a local clone.
@@ -341,13 +386,12 @@ function cmdMcpInstall() {
     say(`${existing ? 'update' : 'add   '} ${t.tool}  -> ${t.file}`);
     done++;
   }
+  const codex = codexToml(pkg);
+  if (codex === 'done') done++; else if (codex === 'skip') skipped++;
+
   say('');
   say(`done: ${done} config(s) ${DRY ? 'would change' : 'written'}, ${skipped} skipped.`);
   if (!DRY && done) say('RESTART each tool - MCP servers load at startup.');
-  say('Codex uses TOML, not JSON; add this to ~/.codex/config.toml by hand:');
-  say('  [mcp_servers.uvctv-vault]');
-  say('  command = "npx"');
-  say(`  args = ["-y", "${pkg}", "mcp"]`);
   if (DRY) say('(dry run - nothing was changed)');
 }
 

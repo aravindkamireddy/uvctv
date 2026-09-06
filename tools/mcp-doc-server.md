@@ -2,8 +2,8 @@
 title: The vault doc server - connecting the ~45 reference documents over MCP
 layer: L7
 priority: P1
-version: 1.2
-date: 2026-09-05
+version: 1.3
+date: 2026-09-06
 changelog: v1.2 - mcp-install automates the config write; global paths corrected (v1.1 gave Claude Code's PROJECT path alongside everyone else's global)
 changelog: v1.1 - added Antigravity, Command Code and OpenClaw config stanzas; v1.0 documented only five of the eight MCP-capable tools and did not say why the others were absent
 source_model: Claude Fable 5
@@ -36,8 +36,7 @@ npx github:<you>/uvctv mcp-install
 
 Detects which tools are installed, merges the entry into each tool's GLOBAL
 config (never a project one - you want the docs everywhere), backs up each
-file first, and refuses to touch a config it cannot parse. Idempotent. Codex
-uses TOML, so it prints that snippet for you to paste.
+file first, and refuses to touch a config it cannot parse. Idempotent, and it handles Codex too - TOML tables are order-independent, so the entry is appended rather than parsed. It refuses to rewrite an existing uvctv-vault entry, since that is the one case it cannot verify without a parser.
 
 Restart each tool afterwards - MCP servers load at startup.
 

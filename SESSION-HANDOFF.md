@@ -2,8 +2,8 @@
 title: Session handoff - build + audit state
 layer: L9
 priority: P0
-version: 2.4
-date: 2026-09-05
+version: 2.5
+date: 2026-09-06
 changelog: v1.5 - date field corrected (had read 2026-07-24 since the original build; version bumps never touched it - GR-2 in this file's own frontmatter). Adds the 2026-08-04 guide rewrite and the two script bugs it exposed.
 source_model: Claude Fable 5
 depends_on: [MANIFEST.md]
@@ -14,7 +14,16 @@ tools: all
 
 # SESSION-HANDOFF - Universal Vibe-Coding Toolkit vault
 
-## State: 2026-09-05 - mcp-install, 106 files, **UNAUDITED**
+## State: 2026-09-06 - mcp-install covers all 6, 106 files, **UNAUDITED**
+
+Codex added to mcp-install. No TOML parser (zero-dep rule): a table is
+APPENDED, which is correct for TOML since tables are order-independent and
+self-delimiting. Refuses to rewrite an existing uvctv-vault entry - the one
+case it cannot verify without parsing - and prints the exact args to set.
+Tested: fresh append preserving existing keys, idempotent re-run, conflict
+refusal.
+
+## State (prior): 2026-09-05 - mcp-install, 106 files
 
 **npx github: RESOLUTION IS NOW PROVEN.** The operator published to
 github:aravindkamireddy/uvctv and ran init successfully from a clean machine -
