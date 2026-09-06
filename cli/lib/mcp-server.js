@@ -225,6 +225,17 @@ if (process.argv.includes('--selftest')) {
   console.log(`uvctv-vault MCP server`);
   console.log(`package root: ${PKG}`);
   console.log(`documents served: ${DOCS.length}`);
+  // Guard: package.json's "files" allowlist silently excluded orchestration/,
+  // design/, mcp/ and others from the npm package, so a server launched via
+  // npx saw 13 documents while a local clone saw 56 - and read_vault_doc
+  // correctly refused paths that search had just returned. Fail loudly.
+  if (DOCS.length < 40) {
+    console.log('');
+    console.log(`WARNING: only ${DOCS.length} documents found. A full vault serves ~56.`);
+    console.log('If this is running from an npm/npx package, package.json "files"');
+    console.log('is probably excluding the reference directories.');
+    process.exit(1);
+  }
   console.log(`tools: ${TOOLS.map(t => t.name).join(', ')}`);
   console.log(`\nsample search "parallel agents ownership":`);
   console.log(searchVault('parallel agents ownership', 1).split('\n').slice(0, 6).join('\n'));
