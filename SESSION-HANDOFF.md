@@ -2,8 +2,8 @@
 title: Session handoff - build + audit state
 layer: L9
 priority: P0
-version: 2.5
-date: 2026-09-06
+version: 2.6
+date: 2026-09-08
 changelog: v1.5 - date field corrected (had read 2026-07-24 since the original build; version bumps never touched it - GR-2 in this file's own frontmatter). Adds the 2026-08-04 guide rewrite and the two script bugs it exposed.
 source_model: Claude Fable 5
 depends_on: [MANIFEST.md]
@@ -14,7 +14,36 @@ tools: all
 
 # SESSION-HANDOFF - Universal Vibe-Coding Toolkit vault
 
-## State: 2026-09-06 - mcp-install covers all 6, 106 files, **UNAUDITED**
+## State: 2026-09-08 - FULL CHAIN PROVEN ON A REAL MACHINE, 108 files
+
+**Everything from repo to agent retrieval now has live evidence**, not just
+container tests:
+- `npx github:aravindkamireddy/uvctv init` installs and links (9 targets).
+- `--adopt` moved 26 pre-existing Cursor skills into the toolkit for real.
+- `mcp-install` wrote configs for 5 tools incl. the Codex TOML append.
+- The doc server returns actual vault narratives: GR-11's three-unrelated-
+  tasks incident and GR-8's eleven-days-exposed token, neither of which is in
+  any installed file.
+
+**The bug that made MCP look broken was NOT the tool description.**
+`package.json`'s `files` allowlist excluded orchestration/, design/, mcp/,
+foundation/, verifiers/ and distillation/ from the npm package. Locally the
+server saw 56 documents; via npx it saw 13, and `read_vault_doc` correctly
+refused paths `search_vault` had just returned. Two tuning passes chased the
+description before the packaging was checked. Fixed, plus `--selftest` now
+exits non-zero below 40 documents naming the allowlist as the likely cause.
+
+`.gitattributes` added: `.sh`/`.py` pinned to LF. Without it a Windows clone
+ships shell scripts that fail on macOS/Linux with `bad interpreter: ^M` - the
+vault shipped cross-platform scripts for weeks with no protection for them.
+
+## STILL OUTSTANDING
+1. Five skills untested on indirect phrasings (orchestrator confirmed only).
+2. Vault UNAUDITED since fix-batch A-F.
+3. Cursor showed "13 resources" - now expected to be 56; re-check after the
+   packaging fix propagates.
+
+## State (prior): 2026-09-06 - mcp-install covers all 6, 106 files
 
 Codex added to mcp-install. No TOML parser (zero-dep rule): a table is
 APPENDED, which is correct for TOML since tables are order-independent and
@@ -166,12 +195,8 @@ vault works.
   args exit 2. setup.sh already rejected them - a twin divergence, which is
   itself the argument for the CLI.
 
-## TO PUBLISH (required before `npx` works for anyone)
-1. Push the vault to a GitHub repo.
-2. Replace `<you>` with the org/user in: README.md, personal-layer/tree.md,
-   BOOTSTRAP.md, both INSTALL guides, cli/bin/uvctv.js help text.
-3. Test `npx github:<org>/<repo> init` from a clean machine.
-Until then every `npx github:<you>/uvctv` line is a placeholder.
+## PUBLISHED
+Live at github.com/aravindkamireddy/uvctv. Placeholders replaced.
 
 ## State (prior): 2026-08-11 - OpenClaw + Zed + unified setup, 101 files
 

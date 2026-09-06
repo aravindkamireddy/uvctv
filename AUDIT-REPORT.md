@@ -179,7 +179,7 @@ Not an audit - a record of scope added since the last one, all UNAUDITED.
 
 # Change note - 2026-08-16 (Node CLI)
 
-- `cli/bin/uvctv.js` + root `package.json` added; `npx github:YOUR-USERNAME/uvctv init`
+- `cli/bin/uvctv.js` + root `package.json` added; `npx github:<you>/uvctv init`
   becomes the primary install path. Zero dependencies (node builtins only), so
   the audit surface is one file.
 - Rationale beyond convenience: two shell twins have produced a defect at every
@@ -193,3 +193,24 @@ Not an audit - a record of scope added since the last one, all UNAUDITED.
 - UNVERIFIED: `npx github:` resolution itself cannot be tested here (no GitHub
   repo). The CLI was tested by direct invocation, including the npx-style
   default vault path (package root). Publishing steps are in SESSION-HANDOFF.
+
+---
+
+# Field note - 2026-09-08 (MCP doc server, real-machine)
+
+The doc server appeared not to fire. Two passes tuned the tool description on
+the assumption it was a routing failure (GR-6's shape). It was not: the npm
+package's `files` allowlist excluded every reference directory, so the server
+launched via npx served 13 documents instead of 56, and `read_vault_doc`
+refused paths `search_vault` had returned moments earlier.
+
+The lesson is about diagnosis order. The symptom - a tool not being used -
+matched a failure mode the vault has a narrative for, and that made the wrong
+hypothesis attractive. The operator's agent actually named the real cause in
+its own reasoning ("orchestration playbooks may be excluded") before I checked
+it. Nothing in the repo could have caught this: the linters test the vault, and
+the vault was fine. What was broken was the PACKAGE, which no check existed
+for - the same gap class as GR-21, one layer further out.
+
+Mitigation: `--selftest` exits non-zero below 40 documents and names the
+allowlist. That is a floor, not a fix for the diagnosis habit.

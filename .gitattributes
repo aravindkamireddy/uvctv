@@ -1,6 +1,16 @@
 * text=auto
+
+# Shell and Python must keep LF or they break on macOS/Linux with
+# "bad interpreter: /bin/bash^M" - a CRLF checkout silently ships broken scripts.
 *.sh text eol=lf
 *.py text eol=lf
+
+# PowerShell prefers CRLF on Windows.
 *.ps1 text eol=crlf
+
+# Never touch binaries.
 *.pdf binary
 *.docx binary
+*.png binary
+*.jpg binary
+*.zip binary
