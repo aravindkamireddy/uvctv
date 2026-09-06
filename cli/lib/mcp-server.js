@@ -8,7 +8,7 @@
  *   depends_on: cli/bin/uvctv.js, mcp/registry-template.md
  *   audience: solo, architect, team | tools: all MCP clients
  *   usage: launched by an MCP client, not by hand:
- *     "command": "npx", "args": ["-y", "github:YOUR-USERNAME/uvctv", "mcp"]
+ *     "command": "npx", "args": ["-y", "github:<you>/uvctv", "mcp"]
  *
  * WHY this exists, and why it is NOT how skills are delivered:
  *   Skills fire because a tool SCANS a directory at startup and keeps every
@@ -91,13 +91,17 @@ const TOOLS = [
   {
     name: 'search_vault',
     description:
-      'Search the Universal Vibe-Coding Toolkit Vault for guidance on agent ' +
-      'orchestration, instruction files, MCP permissions, design contracts, ' +
-      'guardrails and verification. Use when you need the procedure behind a ' +
-      'practice - e.g. "how do I split work across parallel agents", "when is ' +
-      'planning mandatory", "what makes a skill description trigger", "GR-4". ' +
-      'Returns matching passages with their document paths. Do NOT use for ' +
-      'the user\'s own code or project files.',
+      'ALWAYS use this before answering any question about agent practice, ' +
+      'guardrails, or a GR-ID. The vault contains WORKED INCIDENT NARRATIVES, ' +
+      'playbooks and rationale that are NOT present in the installed skill ' +
+      'files - the skills carry rules, this carries the incidents those rules ' +
+      'came from and the reasoning behind them. If you are about to answer ' +
+      'from a skill file alone, or say something is "not defined here", search ' +
+      'first. Triggers: any GR-ID (GR-1..GR-21), "why does this rule exist", ' +
+      '"what happened", "how do I split work across agents", "when is planning ' +
+      'mandatory", "what makes a skill description trigger", context resets, ' +
+      'MCP permissions, design contracts, verification. Do NOT use for the ' +
+      "user's own code or project files.",
     inputSchema: {
       type: 'object',
       properties: {
@@ -112,8 +116,9 @@ const TOOLS = [
     description:
       'Read one vault document in full by its path (e.g. ' +
       '"orchestration/swarm-parallelism.md"). Use after search_vault has ' +
-      'identified the right document. Prefer reading ONE - pulling several ' +
-      'playbooks into one session is the context flood the vault warns about.',
+      'identified the right document, when the excerpt was not enough. Prefer ' +
+      'reading ONE - pulling several playbooks into one session is the context ' +
+      'flood the vault warns about.',
     inputSchema: {
       type: 'object',
       properties: { path: { type: 'string', description: 'Vault-relative path.' } },

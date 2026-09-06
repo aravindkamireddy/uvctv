@@ -47,7 +47,7 @@ const opt = n => {
   return i !== -1 && argv[i + 1] && !argv[i + 1].startsWith('-') ? argv[i + 1] : null;
 };
 const unknown = argv.filter(a => a.startsWith('--') &&
-  !['dry-run','check','force','adopt','all','restore','toolkit','vault','help','version','json','package'].includes(a.slice(2)));
+  !['dry-run','check','force','adopt','all','restore','toolkit','vault','help','version','json','package','selftest'].includes(a.slice(2)));
 if (unknown.length) { console.log(`unknown argument(s): ${unknown.join(' ')}   (try: uvctv help)`); process.exit(2); }
 
 const DRY = flag('dry-run') || flag('check');
