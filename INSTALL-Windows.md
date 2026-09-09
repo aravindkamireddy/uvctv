@@ -179,6 +179,8 @@ your linter config to make a check pass, and make it state facts before editing
 source or running something irreversible. Wiring is in `hooks/README.md` inside
 the vault - currently verified for Claude Code only.
 
+Every command, flag and troubleshooting case is in `COMMANDS.md` in the vault.
+
 ## What happens next
 
 **Your toolkit is yours now.** Edit any file inside

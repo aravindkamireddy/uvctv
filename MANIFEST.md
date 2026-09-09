@@ -11,7 +11,7 @@ audience: all
 tools: all
 ---
 
-# MANIFEST.md - Vault Manifest (114 files - fix-batch A-F applied 2026-07-26, UNAUDITED)
+# MANIFEST.md - Vault Manifest (115 files - fix-batch A-F applied 2026-07-26, UNAUDITED)
 
 **Status 2026-07-24: generation finished.** Every file in the tree below
 exists. Priority tags now describe maintenance weight, not build order.
@@ -33,6 +33,7 @@ vibe-toolkit-vault/
 ├── MANIFEST.md                                   P0  L9       SAT  all      ✅ (this file, final)
 ├── README.md                                     P0  L9       SAT  all      ✅
 ├── BOOTSTRAP.md                                  P0  L9       SAT  all      ✅
+├── COMMANDS.md                                   P1  L9  SA   all          (every npx command, flags, per-platform examples, troubleshooting)
 ├── ONBOARDING.md                                 P0  L9       SAT  all      ✅
 │
 ├── foundation/                                       L1 - Universal foundation
@@ -155,7 +156,7 @@ vibe-toolkit-vault/
     └── curriculum.md                             P2  L10 S    all          (beginner → disciplined swarm on harborline)
 ```
 
-**Total: 112 tree entries + 2 auxiliary artifacts = 114 files on disk.**
+**Total: 113 tree entries + 2 auxiliary artifacts = 115 files on disk.**
 (fix-batch A-F: -12 collapsed ports, +6 canonical skills, +1 cursor notes, +2 parity fixtures; the rest unchanged. In-tree
 runnables, rules files and goldens; auxiliaries = SESSION-HANDOFF.md,
 AUDIT-REPORT.md. Verified by reconciliation on the extracted zip.)

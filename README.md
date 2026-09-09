@@ -59,6 +59,9 @@ than instructs - everything else is text an agent may or may not follow.
 non-reversible commands (GR-23). Wiring and per-tool support:
 `hooks/README.md`. Only the Claude Code surface is verified.
 
+Full command reference, with examples for PowerShell, CMD, macOS and Linux:
+`COMMANDS.md`.
+
 ## Start here
 
 | You are | Read |

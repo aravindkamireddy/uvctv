@@ -30,7 +30,8 @@
     "AUDIT-REPORT.md",
     "SESSION-HANDOFF.md",
     "INSTALL-Windows.md",
-    "INSTALL-Mac-Linux.md"
+    "INSTALL-Mac-Linux.md",
+    "COMMANDS.md"
   ],
   "scripts": {
     "postinstall": "node -e \"console.log('uvctv installed - run: npx uvctv init')\""
