@@ -172,6 +172,13 @@ skips anything it cannot parse. Restart your tools afterwards. Then ask:
 "How should I split work across parallel agents?" - the agent should call
 `search_vault` on its own.
 
+## Optional: turn on the hooks
+
+Two hooks install to `~/agent-toolkit/hooks/`. They block an agent from editing
+your linter config to make a check pass, and make it state facts before editing
+source or running something irreversible. Wiring is in `hooks/README.md` inside
+the vault - currently verified for Claude Code only.
+
 ## What happens next
 
 **Your toolkit is yours now.** Edit any file inside

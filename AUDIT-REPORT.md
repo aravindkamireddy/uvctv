@@ -214,3 +214,24 @@ for - the same gap class as GR-21, one layer further out.
 
 Mitigation: `--selftest` exits non-zero below 40 documents and names the
 allowlist. That is a floor, not a fix for the diagnosis habit.
+
+---
+
+# Change note - 2026-09-12 (ECC adoption)
+
+Nine items added after reading ECC from source. Method matters here: hooks,
+instincts, agents and AgentShield were read as files; the 286 skills were
+surveyed by NAME ONLY and are reported as such. A full comparison was declined
+because it could not have been done honestly within context - the same class of
+error as the two earlier README-based claims that turned out wrong.
+
+New: hooks/ (2 hooks + README owning GR-22, GR-23), skills/harness-audit +
+OpenCode port + suite, prompt-defense baseline in 14 files, optional Conf/Seen
+guardrail columns. GR-22, GR-23, GR-24 minted.
+
+The toolkit linter caught three unresolvable references in the new files
+before they shipped - "skills/agents dirs" read as a path, and a reference to
+hooks/README.md which is vault documentation rather than installed content.
+That is the linter doing exactly the job GR-21 created it for.
+
+UNAUDITED: all of the above.

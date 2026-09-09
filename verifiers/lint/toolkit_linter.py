@@ -39,7 +39,7 @@ from pathlib import Path
 MARKER = re.compile(r"^\s*<!--\s*FILE:\s*(\S+)")
 FENCE = re.compile(r"^\s*(```|~~~)\s*$")
 # references an installed file can make to another installed file
-REF = re.compile(r"(?:~/agent-toolkit/|\b)(shared/[A-Za-z0-9_.-]+|reference/[A-Za-z0-9_.-]+|skills/[A-Za-z0-9_./-]+|opencode/agents/[A-Za-z0-9_.-]+)")
+REF = re.compile(r"(?:~/agent-toolkit/|\b)(shared/[A-Za-z0-9_.-]+|reference/[A-Za-z0-9_.-]+|hooks/[A-Za-z0-9_.-]+|skills/[A-Za-z0-9_./-]+|opencode/agents/[A-Za-z0-9_.-]+)")
 
 
 def guardrail(observed, gr, constraint, tools, test):
@@ -52,7 +52,8 @@ def map_target(marker: str):
     for pre, to in ((".claude/skills/", "skills/"),
                     (".opencode/agent/", "opencode/agents/"),
                     ("~/agent-toolkit/shared/", "shared/"),
-                    ("~/agent-toolkit/reference/", "reference/")):
+                    ("~/agent-toolkit/reference/", "reference/"),
+                    ("~/agent-toolkit/hooks/", "hooks/")):
         if marker.startswith(pre):
             return to + marker[len(pre):]
     return None
@@ -118,7 +119,7 @@ def main() -> int:
 
         # 2. shared/ files nothing points at = dead wiring
         for rel in sorted(present):
-            if (rel.startswith("shared/") or rel.startswith("reference/")) and rel not in referenced:
+            if (rel.startswith("shared/") or rel.startswith("reference/") or rel.startswith("hooks/")) and rel not in referenced:
                 findings.append(guardrail(
                     f"{rel} is extracted into every toolkit but no installed skill references it - dead wiring",
                     "GR-21", "a file worth installing is a file some skill tells the agent to read",

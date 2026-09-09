@@ -2,8 +2,8 @@
 title: Session handoff - build + audit state
 layer: L9
 priority: P0
-version: 2.6
-date: 2026-09-08
+version: 3.0
+date: 2026-09-12
 changelog: v1.5 - date field corrected (had read 2026-07-24 since the original build; version bumps never touched it - GR-2 in this file's own frontmatter). Adds the 2026-08-04 guide rewrite and the two script bugs it exposed.
 source_model: Claude Fable 5
 depends_on: [MANIFEST.md]
@@ -14,7 +14,46 @@ tools: all
 
 # SESSION-HANDOFF - Universal Vibe-Coding Toolkit vault
 
-## State: 2026-09-08 - FULL CHAIN PROVEN ON A REAL MACHINE, 108 files
+## State: 2026-09-12 - hooks + harness-audit, 114 files, **UNAUDITED**
+
+Nine items adopted after reading ECC (github.com/affaan-m/ECC) - hooks,
+instincts, agents, AgentShield and memory read from source, not the README.
+What was taken and what was refused:
+
+TAKEN
+- **hooks/** - the first mechanism in this vault that ENFORCES rather than
+  instructs. `config-protection.js` (GR-22: agents widen a lint rule instead
+  of fixing code; the exemption then silently covers every later file) and
+  `fact-gate.js` (GR-23: "are you sure?" returns the confidence already held;
+  "list the importers" produces evidence). Eight test cases, all verified.
+- **Prompt-defense baseline** in all 7 canonical skills and 7 OpenCode ports.
+  ECC carries this in 67 of 68 agents; this vault had nothing equivalent, and
+  every skill it ships is an instruction file an agent follows. GR-24.
+- **harness-audit skill** + port + 13-case suite: the agent's own config as an
+  attack surface. The vault audited MCP rows but never the files that grant
+  an agent its powers.
+- **Optional Conf/Seen columns** on guardrail entries, with >=0.8 promoting to
+  mechanical enforcement. GR-22 and GR-23 sit at 0.8, which is why they are
+  hooks rather than rules.
+
+REFUSED, deliberately
+- ECC's 286 skills (~50 language/framework, 30 ops, 140 misc) - that is a
+  catalog product; this is a discipline. 19 of theirs overlap this vault.
+- Their 68 agents: ~30 are per-language reviewers. Two archetypes were worth
+  noting (build-error-resolver, silent-failure-hunter); neither was built
+  without a real need.
+- Auto-writing instincts: their loop writes learned rules unreviewed. The
+  draft-then-approve gate stays.
+
+Toolkit is now 22 installed files (7 skills + 7 ports + 4 shared + 4 cards +
+2 hooks... hooks counted separately as they copy verbatim).
+
+## NEXT
+1. Wire the hooks in Claude Code and confirm they fire on a real edit.
+2. Trigger-test harness-audit and the five still-untested skills.
+3. Verify hook surfaces for the other 7 tools - all `[VERIFY]` today.
+
+## State (prior): 2026-09-08 - FULL CHAIN PROVEN ON A REAL MACHINE, 108 files
 
 **Everything from repo to agent retrieval now has live evidence**, not just
 container tests:

@@ -5,7 +5,7 @@
 #
 # Vault frontmatter:
 #   title: Personal layer setup (POSIX) | layer: L7 | priority: P1
-#   version: 3.3 | date: 2026-09-02 (provenance: update refreshes untouched
+#   version: 3.4 | date: 2026-09-02 (provenance: update refreshes untouched
 #     vault files and keeps yours - previously update only ADDED files) (+ Cursor global skills dir) | source_model: Claude Fable 5
 #   changelog: v3.0 - bootstrap/install/uninstall unified into one entry point
 #     with detection: a fresh toolkit is created and linked, an existing one is
@@ -88,7 +88,7 @@ say ""
 # ===========================================================================
 # PART 1 - content: scaffold + extract (skipped for uninstall)
 # ===========================================================================
-SKELETON=(skills opencode/agents shared reference)
+SKELETON=(skills opencode/agents shared reference hooks)
 
 map_target() {
   case "$1" in
@@ -97,6 +97,7 @@ map_target() {
     .opencode/agent/*)          echo "opencode/agents/${1#.opencode/agent/}" ;;
     '~/agent-toolkit/shared/'*) echo "shared/${1#\~/agent-toolkit/shared/}" ;;
     '~/agent-toolkit/reference/'*) echo "reference/${1#\~/agent-toolkit/reference/}" ;;
+    '~/agent-toolkit/hooks/'*) echo "hooks/${1#\~/agent-toolkit/hooks/}" ;;
     *) echo "" ;;
   esac
 }
@@ -153,6 +154,16 @@ if [[ "$MODE" != "uninstall" && -n "$VAULT" ]]; then
     done < <(grep -n '<!--[[:space:]]*FILE:' "$src" 2>/dev/null \
              | sed -E 's/^([0-9]+):.*FILE:[[:space:]]*([^ ]+).*/\2\t\1/')
   done < <(find "$VAULT" -name '*.md' -type f | sort)
+  # hooks are runnable .js, copied verbatim rather than extracted
+  if [[ -d "$VAULT/hooks" ]]; then
+    for hf in "$VAULT"/hooks/*.js; do
+      [[ -e "$hf" ]] || continue
+      hb="$(basename "$hf")"
+      if [[ -e "$TOOLKIT/hooks/$hb" && $FORCE -eq 0 ]]; then kept=$((kept+1))
+      elif [[ $DRY -eq 1 ]]; then say "would write  hooks/$hb"; wrote=$((wrote+1))
+      else mkdir -p "$TOOLKIT/hooks"; cp "$hf" "$TOOLKIT/hooks/$hb"; say "write  hooks/$hb"; wrote=$((wrote+1)); fi
+    done
+  fi
   if [[ $DRY -eq 0 && -n "$NEWMAN" ]]; then
     printf '{\n%s\n}\n' "$(printf '%s' "$NEWMAN" | sed '$ s/,$//')" > "$MANIFEST"
   fi

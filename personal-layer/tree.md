@@ -55,16 +55,16 @@ not two systems.
 
 ## Two ways in: the CLI (preferred) or the setup scripts
 
-**`npx github:YOUR-USERNAME/uvctv init`** - one command, no clone, no zip, no platform
+**`npx github:<you>/uvctv init`** - one command, no clone, no zip, no platform
 twins. This is the preferred path and the only one that works for a REMOTE
 OpenClaw gateway, which cannot see your laptop's filesystem: the same git URL
 that serves `npx` serves `openclaw skills install <git-url> --global`.
 
 ```
-npx github:YOUR-USERNAME/uvctv init      # create + link everything detected
-npx github:YOUR-USERNAME/uvctv update    # refresh content, keep your edits
-npx github:YOUR-USERNAME/uvctv status    # what is linked, what is not, and why
-npx github:YOUR-USERNAME/uvctv unlink    # remove only links this toolkit made
+npx github:<you>/uvctv init      # create + link everything detected
+npx github:<you>/uvctv update    # refresh content, keep your edits
+npx github:<you>/uvctv status    # what is linked, what is not, and why
+npx github:<you>/uvctv unlink    # remove only links this toolkit made
 ```
 
 **`setup.{sh,ps1}`** remain for anyone who would rather not run Node, and are

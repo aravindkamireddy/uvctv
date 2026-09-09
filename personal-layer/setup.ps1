@@ -4,7 +4,7 @@
 #
 # Vault frontmatter:
 #   title: Personal layer setup (Windows) | layer: L7 | priority: P1
-#   version: 3.3 | date: 2026-09-02 (provenance: update refreshes untouched
+#   version: 3.4 | date: 2026-09-02 (provenance: update refreshes untouched
 #     vault files and keeps yours) (+ Cursor global skills dir) (field fix: stray tokens bound silently to
 #     -Vault; all params now named-only and unknown args exit 2) | source_model: Claude Fable 5
 #   changelog: v3.0 - three scripts unified with fresh/update detection.
@@ -85,7 +85,7 @@ Say ""
 # ===========================================================================
 # PART 1 - content
 # ===========================================================================
-$Skeleton = @("skills", "opencode\agents", "shared", "reference")
+$Skeleton = @("skills", "opencode\agents", "shared", "reference", "hooks")
 
 function Resolve-Target($marker) {
     if ($marker -like ".claude/agents/*") {
@@ -97,6 +97,7 @@ function Resolve-Target($marker) {
         @{ From = ".opencode/agent/";        To = "opencode\agents\" }
         @{ From = "~/agent-toolkit/shared/"; To = "shared\" }
         @{ From = "~/agent-toolkit/reference/"; To = "reference\" }
+        @{ From = "~/agent-toolkit/hooks/"; To = "hooks\" }
     )
     foreach ($m in $map) {
         if ($marker.StartsWith($m.From)) { return $m.To + $marker.Substring($m.From.Length).Replace("/", "\") }
@@ -162,6 +163,19 @@ if ($Mode -ne "uninstall" -and $Vault) {
                 }
             }
             $i++
+        }
+    }
+    # hooks are runnable .js, copied verbatim rather than extracted
+    $hookSrc = Join-Path $VaultFull "hooks"
+    if (Test-Path $hookSrc) {
+        foreach ($hf in Get-ChildItem -Path $hookSrc -Filter *.js) {
+            $hd = Join-Path $Toolkit "hooks\$($hf.Name)"
+            if ((Test-Path $hd) -and -not $Force) { $kept++ }
+            elseif ($DryRun) { Say "would write  hooks/$($hf.Name)"; $wrote++ }
+            else {
+                New-Item -ItemType Directory -Path (Split-Path $hd) -Force | Out-Null
+                Copy-Item $hf.FullName $hd -Force; Say "write  hooks/$($hf.Name)"; $wrote++
+            }
         }
     }
     if (-not $DryRun -and $NewManifest.Count -gt 0) {

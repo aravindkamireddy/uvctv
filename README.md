@@ -2,7 +2,7 @@
 title: README - the Universal Vibe-Coding Toolkit vault
 layer: L9
 priority: P0
-version: 1.4
+version: 1.5
 date: 2026-08-16
 changelog: v1.2 fix-batch A-F - canonical skills, six-tool coverage, guardrail-format failures
 changelog: v1.1 B3 - UI/UX discipline noted; GR registry now 15
@@ -32,7 +32,7 @@ senior.
 ## Install in one command
 
 ```
-npx github:YOUR-USERNAME/uvctv init
+npx github:<you>/uvctv init
 ```
 
 No clone, no zip, no platform-specific script. `update`, `status` and `unlink`
@@ -43,12 +43,21 @@ work; see `personal-layer/tree.md`.
 
 ```json
 { "mcpServers": { "uvctv-vault": {
-    "command": "npx", "args": ["-y", "github:YOUR-USERNAME/uvctv", "mcp"] } } }
+    "command": "npx", "args": ["-y", "github:<you>/uvctv", "mcp"] } } }
 ```
 
 Serves the vault's ~56 reference documents on demand - the agent searches
 them when it needs a procedure, instead of you loading them. Read-only, zero
 dependencies. Full instructions and per-tool config: `tools/mcp-doc-server.md`.
+
+## Optional: hooks that enforce
+
+Two hooks ship in `hooks/`. They are the only thing here that ENFORCES rather
+than instructs - everything else is text an agent may or may not follow.
+`config-protection` blocks edits to existing linter configs (GR-22);
+`fact-gate` demands facts, not confirmation, before source edits and
+non-reversible commands (GR-23). Wiring and per-tool support:
+`hooks/README.md`. Only the Claude Code surface is verified.
 
 ## Start here
 

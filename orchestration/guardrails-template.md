@@ -2,8 +2,9 @@
 title: GUARDRAILS.md - entry format specification
 layer: L4
 priority: P1
-version: 1.0
-date: 2026-07-24
+version: 1.1
+date: 2026-09-12
+changelog: v1.1 - optional Conf/Seen columns with promotion and review thresholds
 source_model: Claude Fable 5
 depends_on: [REFERENCE-ANCHORS.md]
 usage: Format SSOT for guardrails files in both layers (team GUARDRAILS.md, personal shared/GUARDRAILS.md). Copy the template block; the filled harborline example is the gold reference.
@@ -28,9 +29,28 @@ loaded into every session.
 Entries are permanent. Removing one requires the same review rigor as
 removing a test - and the same suspicion.
 
-| GR-ID | Date | The exact loop/failure observed | The permanent constraint | Tools it applies to | Test that proves the constraint holds |
+| GR-ID | Date | The exact loop/failure observed | The permanent constraint | Tools it applies to | Test that proves the constraint holds | Conf | Seen |
 |---|---|---|---|---|---|
 ```
+
+## Two optional columns: confidence and evidence
+
+`Conf` (0.3-0.9) and `Seen` (times observed) let a log distinguish a rule you
+are sure of from one written after a single bad afternoon. Rules:
+
+- A new entry starts at **0.5, Seen 1**. One incident is a hypothesis.
+- Each recurrence: +0.1 (cap 0.9), Seen +1. Nothing reaches 1.0 - a constraint
+  that cannot be wrong is not being tested.
+- **>= 0.8 promotes**: worth enforcing mechanically (hook, linter, permission)
+  rather than by instruction, and worth graduating from a personal log to a
+  team file.
+- **<= 0.4 and untouched for two quarters**: review it. Either it was a
+  one-off, or the constraint silently prevented recurrence - the weekly pass
+  decides which, because the log cannot.
+
+Both columns are OPTIONAL. Entries without them are not lesser; the six-field
+core is the contract. Adopt them when the log is long enough that you cannot
+remember which rules were earned and which were guessed.
 
 ## Field rules (mechanical)
 

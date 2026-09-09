@@ -77,7 +77,7 @@ mechanism**, and a zip on your laptop is useless.
 redeploy needed; the volume keeps it.
 
 **Why the vault ships a Node CLI:** this profile is the reason. `npx
-github:YOUR-USERNAME/uvctv init` and `openclaw skills install <git-url> --global`
+github:<you>/uvctv init` and `openclaw skills install <git-url> --global`
 consume the SAME repository - one distribution mechanism for the laptop and
 the remote gateway. A zip serves neither.
 
@@ -97,7 +97,7 @@ the normal vault mechanics work:
 
 On Windows this is usually a WSL gateway (the Companion app can provision an
 app-owned WSL distro and install the gateway inside it `[VERIFY 2026-08]`). If
-so, the gateway's `$HOME` is **inside WSL**, not `C:\Users\YOUR-USERNAME` - link from
+so, the gateway's `$HOME` is **inside WSL**, not `C:\Users\<you>` - link from
 the WSL side, or keep the toolkit in the WSL filesystem. A Windows-side
 junction into WSL is not a supported path.
 

@@ -36,7 +36,7 @@ const crypto = require('crypto');
 
 const HOME = os.homedir();
 const IS_WIN = process.platform === 'win32';
-const VERSION = '1.3.0';
+const VERSION = '1.4.0';
 
 // ---------------------------------------------------------------- arguments
 const argv = process.argv.slice(2);
@@ -79,7 +79,7 @@ const TARGETS = [
   ['opencode/agents', path.join(HOME, '.config', 'opencode', 'agents'), path.join(HOME, '.config', 'opencode')],
 ];
 
-const SKELETON = ['skills', path.join('opencode', 'agents'), 'shared', 'reference'];
+const SKELETON = ['skills', path.join('opencode', 'agents'), 'shared', 'reference', 'hooks'];
 
 // ------------------------------------------------------------- payload map
 // Vault files carry their shippable content in fenced blocks marked
@@ -94,6 +94,7 @@ function mapTarget(marker) {
     ['.opencode/agent/', path.join('opencode', 'agents')],
     ['~/agent-toolkit/shared/', 'shared'],
     ['~/agent-toolkit/reference/', 'reference'],
+    ['~/agent-toolkit/hooks/', 'hooks'],
   ];
   for (const [from, to] of map) {
     if (marker.startsWith(from)) return path.join(to, ...marker.slice(from.length).split('/'));
@@ -173,6 +174,32 @@ function extract() {
       manifest[target] = newHash;
       say(`write  ${target}  (${body.length} lines)`);
       wrote++;
+    }
+  }
+  // Hooks are runnable .js, not fenced payloads - copy them verbatim,
+  // with the same provenance rules as extracted content.
+  const hookSrc = path.join(VAULT, 'hooks');
+  if (fs.existsSync(hookSrc)) {
+    for (const f of fs.readdirSync(hookSrc).filter(n => n.endsWith('.js'))) {
+      const rel = 'hooks/' + f;
+      const dest = path.join(TOOLKIT, 'hooks', f);
+      const content = fs.readFileSync(path.join(hookSrc, f), 'utf8');
+      const newHash = sha(content);
+      if (fs.existsSync(dest) && !FORCE) {
+        const cur = sha(fs.readFileSync(dest, 'utf8'));
+        if (cur === newHash) { manifest[rel] = newHash; kept++; continue; }
+        if (manifest[rel] === cur) {
+          if (DRY) say(`would refresh  ${rel}`);
+          else { fs.writeFileSync(dest, content); say(`refresh ${rel}`); }
+          manifest[rel] = newHash; refreshed++; continue;
+        }
+        yours.push(rel); kept++; continue;
+      }
+      if (DRY) { say(`would write  ${rel}`); wrote++; manifest[rel] = newHash; continue; }
+      fs.mkdirSync(path.dirname(dest), { recursive: true });
+      fs.writeFileSync(dest, content);
+      manifest[rel] = newHash;
+      say(`write  ${rel}`); wrote++;
     }
   }
   saveManifest(manifest);

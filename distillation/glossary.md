@@ -2,7 +2,8 @@
 title: Glossary - ontology across the tool matrix
 layer: L10
 priority: P2
-version: 1.4
+version: 1.5
+changelog: v1.5 - Hooks row added to Part B; only Claude Code's surface is verified
 date: 2026-09-02
 changelog: v1.4 - Cursor skill cell corrected: it HAS a global skills dir (GR-17 class error - an absence was asserted, not verified)
 changelog: v1.2 fix-batch C - Cursor column added to Part B (all rows widened to 7); Codex skill cell corrected. v1.1 GR-17 fix - Antigravity Part B row corrected to primary-doc paths; owns the GR-17 narrative
@@ -97,6 +98,7 @@ instead. Never "capability lost."
 | Swarm isolation | briefs + review | sessions/worktrees | `@workspace_scope` | worktrees (operator) | - `[VERIFY]` | per-project rules | per-project | gateway sessions |
 | Permission surface | frontmatter allow/deny lists, hooks, managed settings | per-agent `permission:` blocks | scope + guardrails culture (thin per-agent denial) | `approval_policy` + `sandbox_mode` | - `[VERIFY]` | ~40-tool budget across servers | `agent.tool_permissions` per-tool keys | node command allow-list + device pairing |
 | MCP config | `.mcp.json` | `opencode.json` `mcp:` | tool MCP config | `config.toml` `[mcp_servers.*]` | `/mcp` | `~/.cursor/mcp.json`, `.cursor/mcp.json` | `context_servers` in settings.json | gateway MCP config |
+| Hooks | `hooks.json` PreToolUse/PostToolUse | plugin events `[VERIFY]` | `[VERIFY]` | native, explicit trust `[VERIFY]` | `[VERIFY]` | third-party adapter `[VERIFY]` | `[VERIFY]` | gateway policy |
 | Plan mode | plan mode | `Plan` primary agent | plan pass pre-launch | read-only first session (operator) | - `[VERIFY]` | - `[VERIFY]` | - `[VERIFY]` | - `[VERIFY]` |
 
 Row-level gaps are Part A concepts landing via the generic-adapter

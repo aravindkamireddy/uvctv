@@ -2,7 +2,7 @@
 title: BOOTSTRAP.md - behavior spec for any model operating this vault
 layer: L9
 priority: P0
-version: 1.6
+version: 1.7
 date: 2026-08-16
 source_model: Claude Fable 5
 changelog: v1.3 fix-batch A-F - routing points at canonical skills/; behavior rule 11 (guardrail-format failures) embedded inline. v1.2 B3 - UI/UX routing rows (designer, design-system, browser-station); v1.1 audit repair - embedded the ten-box authoring gate inline (C1; genre rule 'embed, don't point'); previously the gate existed only in the external master prompt
@@ -70,10 +70,12 @@ enough.
 | Task at hand | Load |
 |---|---|
 | Setting up a repo/team | `team-layer/tree.md` (assembly map) → the filled examples it points at |
-| Setting up a machine | `npx github:YOUR-USERNAME/uvctv init` (preferred - no clone, works for remote gateways), or `setup.{sh,ps1} --vault <path>` (detects fresh vs update; `--dry-run` previews, `--uninstall` reverses) |
+| Setting up a machine | `npx github:<you>/uvctv init` (preferred - no clone, works for remote gateways), or `setup.{sh,ps1} --vault <path>` (detects fresh vs update; `--dry-run` previews, `--uninstall` reverses) |
 | Writing/fixing a skill | `skills/skill-writer/SKILL.md` (CANONICAL - one file, all tools) + `verifiers/description-tuning.md` + `verifiers/eval-loop.md` |
 | Any multi-file/feature task | `skills/orchestrator/SKILL.md`; plans per `orchestration/plan-build-separation.md` |
 | Review request / sensitive diff | `skills/security-reviewer/SKILL.md` |
+| After installing ANY third-party skill, plugin or MCP server | `skills/harness-audit/SKILL.md` - its privilege is your privilege (GR-20) |
+| Enforcing a rule the agent keeps working around | `hooks/README.md` - instruction loses to local incentive; a hook does not (GR-22, GR-23) |
 | Anything MCP | `skills/mcp-permission-audit/SKILL.md` + `mcp/registry-template.md` rules |
 | Parallel/swarm ask | `orchestration/swarm-parallelism.md` (the launch procedure is not optional) |
 | UI screen/flow work | `skills/ui-ux-designer/SKILL.md` + `design/DESIGN.md`; verification per `design/design-review-workflow.md` §browser-station - no UI merge on an unrendered claim (GR-14) |

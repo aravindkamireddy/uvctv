@@ -5,7 +5,8 @@
     "mcp-permission-audit",
     "security-reviewer",
     "ui-ux-designer",
-    "design-system"
+    "design-system",
+    "harness-audit"
   ],
   "canonical_dir": "skills",
   "tools": {
