@@ -36,7 +36,7 @@ const crypto = require('crypto');
 
 const HOME = os.homedir();
 const IS_WIN = process.platform === 'win32';
-const VERSION = '1.4.0';
+const VERSION = '1.5.0';
 
 // ---------------------------------------------------------------- arguments
 const argv = process.argv.slice(2);
@@ -164,7 +164,17 @@ function extract() {
           else { fs.writeFileSync(dest, content); say(`refresh ${target}  (vault updated, your copy was untouched)`); }
           manifest[target] = newHash; refreshed++; continue;
         }
-        // you edited it (or it predates provenance tracking) -> keep, and say so
+        if (!recorded) {
+          // No provenance record: this file predates hash tracking, so we
+          // cannot tell your edit from stale vault content. Calling it "yours"
+          // was wrong - it silently pinned pre-provenance toolkits to their
+          // original content forever. Adopt it: take the vault's version once,
+          // record the hash, and from here on the distinction is real.
+          if (DRY) { say(`would adopt   ${target}  (no provenance record; taking the vault's version)`); }
+          else { fs.writeFileSync(dest, content); say(`adopt  ${target}  (first tracked update; vault version taken)`); }
+          manifest[target] = newHash; refreshed++; continue;
+        }
+        // you edited it since extraction -> keep, and say so
         yours.push(target); kept++; continue;
       }
 
@@ -179,7 +189,14 @@ function extract() {
   // Hooks are runnable .js, not fenced payloads - copy them verbatim,
   // with the same provenance rules as extracted content.
   const hookSrc = path.join(VAULT, 'hooks');
-  if (fs.existsSync(hookSrc)) {
+  if (!fs.existsSync(hookSrc)) {
+    // The hooks dir is missing from the package, not from the vault. This is
+    // the package.json "files" allowlist failing silently - the same class
+    // that once served 13 docs instead of 56. Say so rather than shipping a
+    // toolkit with an empty hooks/ folder.
+    say('note   hooks/ not present in this package - nothing to install.');
+    say('       If this came from npx, package.json "files" is excluding it.');
+  } else {
     for (const f of fs.readdirSync(hookSrc).filter(n => n.endsWith('.js'))) {
       const rel = 'hooks/' + f;
       const dest = path.join(TOOLKIT, 'hooks', f);

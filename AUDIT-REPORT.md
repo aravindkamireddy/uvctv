@@ -235,3 +235,20 @@ hooks/README.md which is vault documentation rather than installed content.
 That is the linter doing exactly the job GR-21 created it for.
 
 UNAUDITED: all of the above.
+
+---
+
+# Field note - 2026-09-13 (two silent-success bugs)
+
+`package.json` "files" excluded hooks/ - the second truncation by that same
+allowlist. A directory was created in the toolkit and left empty, with a
+success summary printed. The CLI now names the allowlist when a source
+directory is absent.
+
+Update also reported six untouched files as operator edits, because a
+pre-provenance toolkit has no hashes to compare against. Conservative, but it
+would have pinned those files permanently. First tracked update now adopts.
+
+Both are the same failure shape as the packaging bug a week earlier: the
+mechanism fails quietly and prints success. Worth noting that all three were
+found by an operator running the thing, not by any check in this repo.

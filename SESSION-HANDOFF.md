@@ -2,8 +2,8 @@
 title: Session handoff - build + audit state
 layer: L9
 priority: P0
-version: 3.0
-date: 2026-09-12
+version: 3.1
+date: 2026-09-13
 changelog: v1.5 - date field corrected (had read 2026-07-24 since the original build; version bumps never touched it - GR-2 in this file's own frontmatter). Adds the 2026-08-04 guide rewrite and the two script bugs it exposed.
 source_model: Claude Fable 5
 depends_on: [MANIFEST.md]
@@ -14,7 +14,26 @@ tools: all
 
 # SESSION-HANDOFF - Universal Vibe-Coding Toolkit vault
 
-## State: 2026-09-12 - hooks + harness-audit, 114 files, **UNAUDITED**
+## State: 2026-09-13 - two field bugs fixed, 114 files, **UNAUDITED**
+
+Found by the operator's first real `npx update` after v3.0:
+
+1. **hooks/ never reached the npm package.** `package.json`'s `files`
+   allowlist did not list it, so `mkdir hooks` ran and nothing was written.
+   This is the SECOND time that allowlist has silently truncated the package -
+   the first cost the MCP server 43 of its 56 documents. Fixed, plus the CLI
+   now says so explicitly instead of leaving an empty folder.
+2. **Pre-provenance files were reported as "YOU changed".** A toolkit created
+   before hash tracking has no record, and the CLI conservatively treated
+   every such file as edited. Six files were listed as the operator's when
+   they had never been touched - and worse, they would never have refreshed.
+   Now the first tracked update ADOPTS the vault version and records the hash.
+
+Lesson worth keeping: both bugs are the same shape - a mechanism that fails
+QUIETLY and reports success. The allowlist truncates without error; the
+conservative-keep looked like careful behaviour. Neither had a check.
+
+## State (prior): 2026-09-12 - hooks + harness-audit, 114 files
 
 Nine items adopted after reading ECC (github.com/affaan-m/ECC) - hooks,
 instincts, agents, AgentShield and memory read from source, not the README.

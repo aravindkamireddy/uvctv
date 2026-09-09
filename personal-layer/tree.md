@@ -2,7 +2,7 @@
 title: Personal global layer - the ~/agent-toolkit tree (buildable spec)
 layer: L7
 priority: P1
-version: 2.0
+version: 2.1
 date: 2026-09-02
 changelog: v1.9 - Cursor row corrected: it HAS a global skills dir; previously recorded as having none
 changelog: v1.5 - uninstallers documented; adopt path for pre-existing real directories
@@ -82,6 +82,13 @@ extracted. On update:
 - file **untouched** since extraction, vault has moved on -> **refreshed**,
   so vault fixes actually reach you
 - file **you edited** -> **kept**, and named in the output so you know which
+
+**First update of a pre-provenance toolkit:** a toolkit created before hash
+tracking has no record, so the CLI cannot tell your edit from stale vault
+content. It ADOPTS the vault's version once and records the hash - after that,
+the distinction is real. Calling those files "yours" (as it briefly did) pinned
+old toolkits to their original content forever, which is the staleness the
+whole mechanism exists to prevent.
 
 Before this, update only ADDED missing files. An existing toolkit would keep
 its original skills forever while reporting success - stale content behind a
