@@ -2,7 +2,7 @@
 title: ONBOARDING.md - adopting the vault and localizing its anchors
 layer: L9
 priority: P0
-version: 1.2
+version: 1.3
 date: 2026-08-07
 changelog: v1.1 B3 - Tier-1 re-anchor row for the design system (components/flows/a11y)
 source_model: Claude Fable 5
@@ -71,6 +71,14 @@ the end.
 vault's *lessons* stay fictional forever (Tier 3) - because a lesson
 anchored to your repo stops being shareable, and shareability is why
 the fixtures exist.
+
+## First thing after install
+
+Open `~/agent-toolkit/shared/STANDING.md`. It is the one file that is yours
+rather than the vault's - your defaults, read before any skill's own. It ships
+opinionated (tests on request only, scoped runs, diffs over full files) so that
+it is useful immediately, which also means some of it will be wrong for you.
+Delete those lines. An unedited template is not a preference.
 
 ## Backing out
 

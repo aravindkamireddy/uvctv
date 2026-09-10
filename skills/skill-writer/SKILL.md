@@ -43,12 +43,15 @@ An installed skill can only reach files that exist beside it. In a personal
 toolkit that is `~/agent-toolkit/shared/`; in a project it is the repo's own
 copies. Consult, in this order:
 
-1. `~/agent-toolkit/shared/GUARDRAILS.md` - permanent constraints earned from
-   past failures. If a rule there contradicts anything below, the rule wins.
-2. The project's `AGENTS.md` - commands, pins, ask-first, never-do.
-3. `~/agent-toolkit/shared/mcp-registry.md` (or the project's
+1. `~/agent-toolkit/shared/STANDING.md` - the operator's standing
+   preferences. These beat this skill's own defaults; an explicit
+   instruction in the current task beats them.
+2. `~/agent-toolkit/shared/GUARDRAILS.md` - permanent constraints earned
+   from past failures. A guardrail beats a preference AND this skill.
+3. The project's `AGENTS.md` - commands, pins, ask-first, never-do.
+4. `~/agent-toolkit/shared/mcp-registry.md` (or the project's
    `mcp/registry.md` (project) / `~/agent-toolkit/shared/mcp-registry.md` (personal)) before touching any external service.
-4. `~/agent-toolkit/shared/DESIGN.md` (or the project's `design/DESIGN.md` (project) / `~/agent-toolkit/shared/DESIGN.md` (personal))
+5. `~/agent-toolkit/shared/DESIGN.md` (or the project's `design/DESIGN.md` (project) / `~/agent-toolkit/shared/DESIGN.md` (personal))
    for any user-facing work.
 
 A missing file is not permission to improvise - say it is missing.

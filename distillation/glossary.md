@@ -49,6 +49,12 @@ environment; governed by the registry.
 roles | read/write scope | approval triggers | credential handling.
 The matrix is the deliverable; "connected" is not.
 
+**Standing preference** - an operator default with no incident behind it
+("tests on request only"). Lives in `shared/STANDING.md`, read first by every
+skill. Distinct from a guardrail: a preference has no date, no test, and
+belongs to one operator. Precedence: task instruction > guardrail > standing
+preference > skill default.
+
 **Guardrail.** A failure pattern converted to a permanent, tested
 constraint (six-field entry). Narratives live once each with owner
 files; tables stay compact.

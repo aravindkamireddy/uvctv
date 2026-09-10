@@ -47,7 +47,7 @@ skipped exactly when it matters (the GR-9 lesson generalized).
 3. **Options considered, with rejections reasoned** - minimum two
    options; a plan with one option is a decision wearing a plan's
    clothes (traces-over-answers made structural).
-4. **The decision** + its verification: which tests prove it worked,
+4. **The decision** + its verification, sized to blast radius (GR-25):
    which review it needs.
 5. **Execution shape** - the orchestrator route (phases, agents, zones)
    the build will follow.
@@ -120,7 +120,10 @@ Skip for: single-file fixes, already-decomposed steps, questions.
    ask-first / never-do.
 3. Options considered - MINIMUM TWO - each rejected one with a one-clause
    reason. A plan with one option is a decision wearing a plan's clothes.
-4. Verification: which tests prove it worked, which review it needs.
+4. Verification, PROPORTIONAL to blast radius (GR-25): cosmetic -> look at
+   it, no tests; one-file behavior -> the tests already covering it; new
+   contract -> extend tests; schema/auth/money -> tests AND review. Never
+   write tests unasked. Run the tests for what you touched, not the suite.
 5. Execution shape: phases, agents, zones.
 
 ## The rule that makes it worth doing

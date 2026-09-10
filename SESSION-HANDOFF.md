@@ -2,8 +2,8 @@
 title: Session handoff - build + audit state
 layer: L9
 priority: P0
-version: 3.1
-date: 2026-09-13
+version: 3.2
+date: 2026-09-15
 changelog: v1.5 - date field corrected (had read 2026-07-24 since the original build; version bumps never touched it - GR-2 in this file's own frontmatter). Adds the 2026-08-04 guide rewrite and the two script bugs it exposed.
 source_model: Claude Fable 5
 depends_on: [MANIFEST.md]
@@ -14,7 +14,33 @@ tools: all
 
 # SESSION-HANDOFF - Universal Vibe-Coding Toolkit vault
 
-## State: 2026-09-13 - two field bugs fixed, 114 files, **UNAUDITED**
+## State: 2026-09-15 - verification proportionality, 116 files, **UNAUDITED**
+
+**An adopter reported the vault making agents test-happy** - full suite runs
+and new tests for a UI colour change. Investigated rather than deflected, and
+the vault WAS contributing: three installed files told an agent to define
+"which tests must pass" on every route, with no size threshold, and the
+orchestrator's only gold example was a heavy one. GR-25 minted.
+
+- **Proportionality table** in orchestrator and the plan-build card: cosmetic
+  -> look at it; one-file behavior -> those tests; new contract -> extend
+  tests; schema/auth/money -> tests AND review.
+- **Never write tests unasked**, stated explicitly. A refactor with no
+  behavior change gets existing tests RUN, not new ones written.
+- **Scoped runs**: tests covering what you touched; full suite once before
+  merge, not after every edit.
+- **A light gold example** added beside the heavy one, so the pattern an agent
+  copies is not always the expensive path.
+
+**STANDING.md** (`shared/`): operator preferences, read FIRST by all 7 skills.
+Precedence: task instruction > GUARDRAILS > STANDING > skill default. This is
+the toggle - "tests: on request only" is set once, not re-typed each session.
+
+Also: harness-audit gained an unpinned-dependency check (it found that by luck
+in the field) and a count-what-you-listed rule (its totals disagreed with its
+own findings across three runs). npx pinning documented in COMMANDS.md.
+
+## State (prior): 2026-09-13 - two field bugs fixed, 114 files
 
 Found by the operator's first real `npx update` after v3.0:
 

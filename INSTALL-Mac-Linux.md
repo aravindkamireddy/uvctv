@@ -203,10 +203,14 @@ AI tool.
 **Re-run `setup.sh`** only when you get an updated vault. It never
 overwrites your edits unless you add `--force`.
 
-### Three files worth filling in over time
+### Four files worth filling in over time
 
 Inside `~/agent-toolkit/shared/`:
 
+- **`STANDING.md`** — your standing preferences, read FIRST by every skill.
+  It ships with `tests: on request only` and scoped test runs, which is what
+  stops an agent running the whole suite after a colour change. Open it once
+  and cut anything you disagree with.
 - **`GUARDRAILS.md`** — every time an AI tool wastes your time, write one line:
   what happened, and what rule would prevent it. This is the highest-value file
   in the whole setup, and it starts empty because only you can write it.

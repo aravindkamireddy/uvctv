@@ -219,6 +219,34 @@ npx github:aravindkamireddy/uvctv version
 
 ---
 
+
+## Pin the version you run
+
+`github:aravindkamireddy/uvctv` resolves to whatever `main` points at **today**.
+That is convenient and it is also a supply-chain surface: the command you
+approved once is not necessarily the code that runs next week. `harness-audit`
+flags unpinned specs for exactly this reason (GR-20).
+
+To pin, tag a release in the repo and add `#tag` to every spec:
+
+```
+npx github:aravindkamireddy/uvctv#v3.0 init
+```
+
+```json
+{ "mcpServers": { "uvctv-vault": {
+    "command": "npx",
+    "args": ["-y", "github:aravindkamireddy/uvctv#v3.0", "mcp"] } } }
+```
+
+A commit SHA works too and is stricter: `#a1b2c3d`. Update deliberately by
+bumping the tag, which is the point - you decide when new code runs.
+
+Unpinned is a defensible choice for a repo you own and push to yourself. It is
+not defensible for a repo someone else controls.
+
+---
+
 ## Flag reference
 
 | Flag | Applies to | Effect |
@@ -345,6 +373,27 @@ npx -y github:aravindkamireddy/uvctv mcp --selftest
 ```
 
 ---
+
+## After install: set your defaults
+
+`init` writes `~/agent-toolkit/shared/STANDING.md` - your standing preferences,
+read first by every skill. Worth opening once:
+
+```bash
+# macOS / Linux
+open ~/agent-toolkit/shared/STANDING.md
+```
+
+```powershell
+# Windows
+notepad $HOME\agent-toolkit\shared\STANDING.md
+```
+
+It ships with `tests: on request only` and scoped test runs, which stops agents
+running the full suite after every edit. Delete anything you disagree with.
+
+`update` treats it as yours the moment you edit it - the vault's version will
+never overwrite your copy without `--force`.
 
 ## Reading the output
 

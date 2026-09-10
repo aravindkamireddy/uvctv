@@ -252,3 +252,24 @@ would have pinned those files permanently. First tracked update now adopts.
 Both are the same failure shape as the packaging bug a week earlier: the
 mechanism fails quietly and prints success. Worth noting that all three were
 found by an operator running the thing, not by any check in this repo.
+
+---
+
+# Change note - 2026-09-15 (verification proportionality)
+
+An adopter said the toolkit made agents run and write tests constantly. The
+easy response was that it comes from elsewhere in their setup - which was
+partly true and entirely beside the point. Three INSTALLED files carried
+unconditional test language, and the orchestrator's single worked example was
+a schema change. An agent copying the only pattern it can see will copy that
+one.
+
+Fixed as tiers rather than a ban: cosmetic changes get looked at, contracts get
+tests, schema gets tests and review. GR-25 records the incident behind it.
+
+STANDING.md is the structural half - preferences had no home, so operators
+re-typed corrections every session and the system recorded nothing. A
+preference is not a guardrail: no incident, no date, no test, and it belongs to
+one operator rather than the vault.
+
+UNAUDITED, as with everything since fix-batch A-F.

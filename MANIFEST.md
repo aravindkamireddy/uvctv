@@ -2,7 +2,7 @@
 title: Vault Manifest - planned tree, generation order, pre-approval audit
 layer: L9
 priority: P0
-version: 3.0 (2026-09-12 - hooks (the first mechanism here that ENFORCES rather than instructs), harness-audit skill, prompt-defense baseline in all 7 skills + 7 ports, optional confidence scoring on guardrails; GR-22/23/24 minted. Prior 2.6 2026-09-08 - .gitattributes + .gitignore added; MCP doc server proven end to end on a real machine. Prior 2.5 2026-09-06 - mcp-install now covers Codex via TOML table append with conflict refusal. Prior 2.4 2026-09-05 - mcp-install command: merges the doc-server entry into every tool's global MCP config, with backups and parse-refusal. Prior 2.3 2026-09-02 - MCP doc server added: 56 reference documents served on demand, skills stay as files. Prior: Cursor correction: it HAS a global skills directory; now a normal link target in all three installers. Prior 2.1 2026-08-21 - four orchestration playbooks now extract as condensed reference cards into the toolkit; orchestrator points at them (one hop, linted). Prior 2.0 2026-08-19 - toolkit_linter added after three installed skills were found referencing paths that do not exist post-extraction; skills now wire shared/ explicitly; GR-21 minted. Prior 1.9 2026-08-16 - Node CLI added (`npx github:<you>/uvctv`); setup.ps1 v3.1 unknown-arg guard. Prior 1.8 2026-08-11 - OpenClaw + Zed columns; six personal-layer scripts unified into setup.{sh,ps1}; GR-20 minted. Prior 1.7 2026-08-07 - uninstallers added; install gains --adopt/-Adopt; PowerShell ${Dst} blocker fixed. Prior 1.6 2026-07-26 - fix-batch A-F: canonical skills, Codex skills, Cursor column, guardrail emission, tool detection. Prior 1.5 2026-07-25 - toolkit bootstrappers added (bootstrap-toolkit.sh/.ps1); installer link targets corrected against OpenCode/Antigravity/Command Code docs. Prior 1.4 B2/B3: UI/UX discipline - 14 new files (2 skills x 3 native ports + workflow + rubric + 2 suites + a11y linter/goldens + JSONL), 7 deepens, GR-13/14/15; parity 6x6; SSOT +2 rows. Prior: 1.3 B0: reviewed rules files ssot.rules.json + staleness.rules.json placed; staleness_linter v1.1 exempt mechanism + exemption negative-test golden; opencode-config line-51 reference fix. Prior: 1.2 2026-07-24 added Windows script twins install.ps1 + run_fixtures.ps1; audited Phase 1-4 complete; JSONL spec amended per approval 2026-07-24 to 15-25 exemplar-grade lines per task family)
+version: 3.1 (2026-09-15 - verification proportionality (GR-25): tests on request only, scoped runs, tiers by blast radius; STANDING.md operator preferences; harness-audit pin check + count rule; npx pinning documented. Prior 3.0 2026-09-12 - hooks (the first mechanism here that ENFORCES rather than instructs), harness-audit skill, prompt-defense baseline in all 7 skills + 7 ports, optional confidence scoring on guardrails; GR-22/23/24 minted. Prior 2.6 2026-09-08 - .gitattributes + .gitignore added; MCP doc server proven end to end on a real machine. Prior 2.5 2026-09-06 - mcp-install now covers Codex via TOML table append with conflict refusal. Prior 2.4 2026-09-05 - mcp-install command: merges the doc-server entry into every tool's global MCP config, with backups and parse-refusal. Prior 2.3 2026-09-02 - MCP doc server added: 56 reference documents served on demand, skills stay as files. Prior: Cursor correction: it HAS a global skills directory; now a normal link target in all three installers. Prior 2.1 2026-08-21 - four orchestration playbooks now extract as condensed reference cards into the toolkit; orchestrator points at them (one hop, linted). Prior 2.0 2026-08-19 - toolkit_linter added after three installed skills were found referencing paths that do not exist post-extraction; skills now wire shared/ explicitly; GR-21 minted. Prior 1.9 2026-08-16 - Node CLI added (`npx github:<you>/uvctv`); setup.ps1 v3.1 unknown-arg guard. Prior 1.8 2026-08-11 - OpenClaw + Zed columns; six personal-layer scripts unified into setup.{sh,ps1}; GR-20 minted. Prior 1.7 2026-08-07 - uninstallers added; install gains --adopt/-Adopt; PowerShell ${Dst} blocker fixed. Prior 1.6 2026-07-26 - fix-batch A-F: canonical skills, Codex skills, Cursor column, guardrail emission, tool detection. Prior 1.5 2026-07-25 - toolkit bootstrappers added (bootstrap-toolkit.sh/.ps1); installer link targets corrected against OpenCode/Antigravity/Command Code docs. Prior 1.4 B2/B3: UI/UX discipline - 14 new files (2 skills x 3 native ports + workflow + rubric + 2 suites + a11y linter/goldens + JSONL), 7 deepens, GR-13/14/15; parity 6x6; SSOT +2 rows. Prior: 1.3 B0: reviewed rules files ssot.rules.json + staleness.rules.json placed; staleness_linter v1.1 exempt mechanism + exemption negative-test golden; opencode-config line-51 reference fix. Prior: 1.2 2026-07-24 added Windows script twins install.ps1 + run_fixtures.ps1; audited Phase 1-4 complete; JSONL spec amended per approval 2026-07-24 to 15-25 exemplar-grade lines per task family)
 date: 2026-07-24
 source_model: Claude Fable 5
 depends_on: [REFERENCE-ANCHORS.md]
@@ -11,7 +11,7 @@ audience: all
 tools: all
 ---
 
-# MANIFEST.md - Vault Manifest (115 files - fix-batch A-F applied 2026-07-26, UNAUDITED)
+# MANIFEST.md - Vault Manifest (116 files - fix-batch A-F applied 2026-07-26, UNAUDITED)
 
 **Status 2026-07-24: generation finished.** Every file in the tree below
 exists. Priority tags now describe maintenance weight, not build order.
@@ -139,6 +139,7 @@ vibe-toolkit-vault/
 │   ├── setup.sh                                  P1  L7  SA   all          (ONE script: scaffold+extract+link+update+uninstall; --dry-run/--check)
 │   ├── setup.ps1                                 P1  L7  SA   all          (Windows twin of setup.sh)
 │   ├── shared-guardrails-personal.md             P1  L7  SA   all          (personal log template, references format SSOT)
+│   ├── shared-standing-personal.md              P1  L7  SA   all          (personal log template, references format SSOT)
 │   ├── shared-mcp-registry-personal.md           P1  L7  SA   all          (references registry format SSOT)
 │   └── shared-design-personal.md                 P1  L7  SA   all          (fallback tokens, references DESIGN format SSOT)
 │
@@ -156,7 +157,7 @@ vibe-toolkit-vault/
     └── curriculum.md                             P2  L10 S    all          (beginner → disciplined swarm on harborline)
 ```
 
-**Total: 113 tree entries + 2 auxiliary artifacts = 115 files on disk.**
+**Total: 114 tree entries + 2 auxiliary artifacts = 116 files on disk.**
 (fix-batch A-F: -12 collapsed ports, +6 canonical skills, +1 cursor notes, +2 parity fixtures; the rest unchanged. In-tree
 runnables, rules files and goldens; auxiliaries = SESSION-HANDOFF.md,
 AUDIT-REPORT.md. Verified by reconciliation on the extracted zip.)

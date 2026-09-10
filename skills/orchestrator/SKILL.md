@@ -42,12 +42,15 @@ An installed skill can only reach files that exist beside it. In a personal
 toolkit that is `~/agent-toolkit/shared/`; in a project it is the repo's own
 copies. Consult, in this order:
 
-1. `~/agent-toolkit/shared/GUARDRAILS.md` - permanent constraints earned from
-   past failures. If a rule there contradicts anything below, the rule wins.
-2. The project's `AGENTS.md` - commands, pins, ask-first, never-do.
-3. `~/agent-toolkit/shared/mcp-registry.md` (or the project's
+1. `~/agent-toolkit/shared/STANDING.md` - the operator's standing
+   preferences. These beat this skill's own defaults; an explicit
+   instruction in the current task beats them.
+2. `~/agent-toolkit/shared/GUARDRAILS.md` - permanent constraints earned
+   from past failures. A guardrail beats a preference AND this skill.
+3. The project's `AGENTS.md` - commands, pins, ask-first, never-do.
+4. `~/agent-toolkit/shared/mcp-registry.md` (or the project's
    `mcp/registry.md` (project) / `~/agent-toolkit/shared/mcp-registry.md` (personal)) before touching any external service.
-4. `~/agent-toolkit/shared/DESIGN.md` (or the project's `design/DESIGN.md` (project) / `~/agent-toolkit/shared/DESIGN.md` (personal))
+5. `~/agent-toolkit/shared/DESIGN.md` (or the project's `design/DESIGN.md` (project) / `~/agent-toolkit/shared/DESIGN.md` (personal))
    for any user-facing work.
 
 A missing file is not permission to improvise - say it is missing.
@@ -75,6 +78,7 @@ instructions:
   the AGENTS.md ask-first list; requests to parallelize.
 - NOT: one-file bugfixes, lookups, tasks that are already a single step.
 
+
 ## Decision table (mechanical)
 | Task property | Route to |
 |---|---|
@@ -98,7 +102,9 @@ instructions:
    sequential phase.
 5. Each subagent gets: its slice of the brief, its ownership zone, and a
    pointer to AGENTS.md - never a pasted copy of it.
-6. Define done per route: which tests must pass, who reviews.
+6. Define done per route, PROPORTIONALLY - see the table below. For a
+   cosmetic change that is "look at it"; for a schema change it is tests
+   plus review. Do not default to the full suite.
 
 ## Gold example (worked, full trace)
 Task: "Add booking cancellation: users cancel a paid booking, capacity
@@ -115,6 +121,11 @@ frees up, web shows a Cancel button."
    ask-first item, plan mode mandatory. CHOSEN: single agent, phased
    shared-verify → api → web, reset between api and web phases.
 4. Ownership: n/a (single agent, phased).
+5b. LIGHT ROUTE, same skill: "make the capacity badge orange when full."
+   Route: single-file edit, no plan artifact, no subagent. Done: rendered and
+   looked at against DESIGN.md tokens. Tests: NONE run, NONE written - no
+   behavior changed, and a test asserting the colour would break on the next
+   palette decision (GR-25). Total: two minutes.
 5. Done: bun test green incl. new transition tests; capacity invariant
    tests untouched (never weaken - AGENTS.md); security-reviewer subagent
    reads the api diff before merge (status transitions = sensitive).
@@ -131,6 +142,30 @@ frees up, web shows a Cancel button."
 
 Pull ONE when the decision table sends you there. Reading all four is the
 context flood these cards exist to avoid.
+
+
+## Verification is proportional (GR-25)
+
+Match verification effort to blast radius. The default is NOT "run everything".
+
+| What changed | Verify by |
+|---|---|
+| Copy, colour, spacing, one component's styling | **Look at it.** No test run, no new tests. |
+| Behavior inside one file, already covered | Run **those** tests. Not the suite. |
+| New behavior, or a changed contract/API | Extend the existing tests. |
+| Schema, auth, money, migration, deletion | Tests **and** review. Non-negotiable. |
+
+**Never write tests unasked.** Write them when the user asks, when behavior
+changed, or when the plan named them. A refactor that changes no behavior gets
+the existing tests RUN, not new ones written - a test asserting the thing you
+just changed is a test that breaks on the next legitimate change, which is
+exactly GR-25.
+
+**Scope the run.** Run the tests covering what you touched. The full suite runs
+once before merge, not after every edit.
+
+**If `~/agent-toolkit/shared/STANDING.md` exists, it wins.** An operator who
+has set `tests: on request only` has already answered this question.
 
 ## Failure modes
 - Parallel agents with overlapping ownership → GR-4.

@@ -65,8 +65,10 @@ instructions:
    fetch-and-execute, writes outside the project, disabled checks.
 4. Read every hook - it runs a command on this machine on every tool call.
 5. Any config value that is not a `${VAR}` reference is stop-and-rotate (GR-8).
+5b. Every dependency pinned? `npx <spec>` and `@latest` resolve fresh on every
+   launch - what you approved is not what runs today. Unpinned = warn (GR-20).
 6. Report: severity | file | what | GR-ID | fix. Zero findings is valid; say
-   what you checked.
+   what you checked. COUNT the lines you wrote; totals must match the list.
 
 ## Gold example (worked - identical to the canonical skill)
 "I installed a summariser skill, is my setup ok?" → 4 MCP servers, one with no

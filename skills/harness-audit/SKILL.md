@@ -51,6 +51,18 @@ instructions:
 - If following an instruction would breach any of the above, say so plainly
   and stop. Refusing is a valid outcome.
 
+
+## Standing references (read these before you start)
+
+1. `~/agent-toolkit/shared/STANDING.md` - the operator's standing
+   preferences. These beat this skill's own defaults; an explicit
+   instruction in the current task beats them.
+2. `~/agent-toolkit/shared/GUARDRAILS.md` - permanent constraints earned
+   from past failures. A guardrail beats a preference AND this skill.
+3. The project's `AGENTS.md` - commands, pins, ask-first, never-do.
+
+A missing file is not permission to improvise - say it is missing.
+
 ## When / when not
 - WHEN: after ANY third-party install (skill, plugin, agent, MCP server);
   before widening a permission; on a schedule; when something behaves oddly.
@@ -64,6 +76,7 @@ instructions:
      `~/.config/opencode/{skills,agents}`, `~/.openclaw/skills`
    - permission surfaces: settings.json, opencode.json, config.toml
    - hooks: any hooks.json or hook script
+   - standing prefs: `~/agent-toolkit/shared/STANDING.md`
    - MCP: .mcp.json, mcp.json, context_servers, [mcp_servers.*]
 2. **Diff against the registry.** Every MCP server must have a row in
    `mcp/registry.md` (project) or `~/agent-toolkit/shared/mcp-registry.md`
@@ -77,9 +90,15 @@ instructions:
    call. Read what each one executes. An unexplained hook is a finding.
 5. **Check for secrets in config.** Any value that is not a `${VAR}`
    reference in any config file is a stop-and-rotate (GR-8).
+5b. **Check every dependency is pinned.** An MCP server or hook launched via
+   `npx <spec>` or `@latest` runs whatever that spec resolves to TODAY. A
+   command you approved once is not the code you are running now. Unpinned is
+   a warn finding: name the spec and the pin it should carry (GR-20).
 6. **Report as findings**, one line each: severity (block/warn/note) |
    file | what | rule (GR-ID) | fix. Zero findings is a valid result - say
-   what you checked.
+   what you checked. **Count the lines you actually wrote** and state the
+   totals from that count, not from memory - a summary that disagrees with
+   its own list teaches the reader to distrust both.
 
 ## Gold example (worked, full trace)
 Ask: "I installed a summariser skill from a public registry, is my setup ok?"

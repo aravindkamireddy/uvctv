@@ -46,6 +46,7 @@ not two systems.
 │   ├── context-reset.md   ← reset vs accumulate; what crosses the boundary
 │   └── role-design.md     ← allowlist from a role's single output
 ├── shared/
+│   ├── STANDING.md        ← YOUR defaults; every skill reads it first
 │   ├── GUARDRAILS.md       ← personal "mistakes my agents keep making" log
 │   ├── mcp-registry.md     ← personal MCP servers + credential scope
 │   └── DESIGN.md           ← personal default design-token fallback

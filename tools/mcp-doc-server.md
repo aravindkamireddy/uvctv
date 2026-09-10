@@ -95,6 +95,12 @@ the fetching - check that before assuming.
 **Running from a local clone instead of GitHub?** Replace the command with
 `node /path/to/vault/cli/bin/uvctv.js mcp`.
 
+## Pin the spec
+
+`github:<you>/uvctv` follows `main`. Tag a release and use
+`github:<you>/uvctv#v3.0` in every config so the server you approved is the
+server that runs. `harness-audit` reports unpinned specs as a warn (GR-20).
+
 ## What it exposes
 
 - **55 resources** - every reference document, addressed `vault://<path>`.

@@ -62,6 +62,15 @@ non-reversible commands (GR-23). Wiring and per-tool support:
 Full command reference, with examples for PowerShell, CMD, macOS and Linux:
 `COMMANDS.md`.
 
+## Set your defaults once
+
+`~/agent-toolkit/shared/STANDING.md` holds your standing preferences - every
+skill reads it first. It ships with `tests: on request only`, scoped test runs,
+and a few output defaults. Edit it; an unedited template is not a preference.
+
+Precedence: an instruction in the current task > GUARDRAILS.md > STANDING.md >
+a skill's own default.
+
 ## Start here
 
 | You are | Read |

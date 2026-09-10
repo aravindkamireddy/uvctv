@@ -76,6 +76,8 @@ enough.
 | Review request / sensitive diff | `skills/security-reviewer/SKILL.md` |
 | After installing ANY third-party skill, plugin or MCP server | `skills/harness-audit/SKILL.md` - its privilege is your privilege (GR-20) |
 | Enforcing a rule the agent keeps working around | `hooks/README.md` - instruction loses to local incentive; a hook does not (GR-22, GR-23) |
+| Repeating the same correction every session | `~/agent-toolkit/shared/STANDING.md` - a preference you must repeat is one the system failed to record |
+| Deciding how much to verify | orchestrator's proportionality table - cosmetic means look at it, not run the suite (GR-25) |
 | Anything MCP | `skills/mcp-permission-audit/SKILL.md` + `mcp/registry-template.md` rules |
 | Parallel/swarm ask | `orchestration/swarm-parallelism.md` (the launch procedure is not optional) |
 | UI screen/flow work | `skills/ui-ux-designer/SKILL.md` + `design/DESIGN.md`; verification per `design/design-review-workflow.md` §browser-station - no UI merge on an unrendered claim (GR-14) |
